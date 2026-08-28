@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# Streamlit
+.streamlit/secrets.toml
+
+# Documentos internos de la cátedra / contexto
+agent.md
+
+# Sistema
+Thumbs.db
+.DS_Store
