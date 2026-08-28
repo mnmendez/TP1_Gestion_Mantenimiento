@@ -270,6 +270,65 @@ def estimar_repeticiones(df_ed):
     return df
 
 
+LETRAS_OCURRENCIA = "abcdefghijklmnopqrstuvwxyz"
+
+
+def _aplicar_ediciones_estim(df_estim):
+    """Aplica las ediciones de t0/cuadrilla hechas en el editor de la Pestaña 3.
+
+    El valor vigente de un st.data_editor vive en st.session_state[key] como
+    {"edited_rows": {fila: {columna: valor}}}; se usa para que el desglose por
+    repeticiones de la Pestaña 2 respete lo que el usuario ajustó en t0/cuadrilla.
+    """
+    st_key = "editor_estim"
+    if st_key in st.session_state:
+        edited = st.session_state[st_key].get("edited_rows", {})
+        for ridx, cambios in edited.items():
+            i = int(ridx)
+            if i >= df_estim.shape[0]:
+                continue
+            for col, val in cambios.items():
+                if col in df_estim.columns:
+                    df_estim.loc[i, col] = val
+    return df_estim
+
+
+def generar_fallas_supuesto(con_rep, df_estim):
+    """Base canónica de fallas según el supuesto vigente.
+
+    sin repetición -> las 5 filas originales del TP (F1..F5).
+    con repetición -> cada F_i se desglosa en N_est[i] ocurrencias (F1a, F1b, …)
+                      repartiendo TTP / Repuestos / HH en partes iguales.
+    Los totales anuales se conservan: TTP = 120 h, Repuestos = $10.220, HH = 136.
+    """
+    base = pd.DataFrame(DATOS_FALLAS)
+    cols = ["evento", "subsistema", "componente", "descripcion", "tarea",
+            "ttp", "repuestos", "hh", "t0", "cuadrilla"]
+    if not con_rep:
+        return base[cols].copy()
+    n_por_evento = df_estim.set_index("evento")["N_est"].to_dict()
+    filas = []
+    for _, r in base.iterrows():
+        n = max(1, int(n_por_evento.get(r["evento"], 1)))
+        for k in range(1, n + 1):
+            fila = r.to_dict()
+            fila["evento"] = f"{r['evento']}{LETRAS_OCURRENCIA[k - 1]}"
+            fila["ttp"] = r["ttp"] / n
+            fila["repuestos"] = r["repuestos"] / n
+            fila["hh"] = r["hh"] / n
+            filas.append(fila)
+    return pd.DataFrame(filas)[cols]
+
+
+# Si el usuario pidió restaurar el registro original, se limpian acá los estados
+# de los widgets ANTES de instanciarlos (setear/borrar un widget ya instanciado
+# genera StreamlitAPIException). El flag lo levanta el botón de la Pestaña 2.
+if st.session_state.pop("reiniciar_registro", False):
+    for k in ("editor_fallas", "editor_estim", "usar_n_est", "sup_aplicado__fallas"):
+        st.session_state.pop(k, None)
+    st.session_state["fallas_custom"] = []
+
+
 # ==============================================================================
 # 3) BARRA LATERAL - CRITERIOS Y PARÁMETROS DINÁMICOS
 # ==============================================================================
@@ -299,10 +358,12 @@ with st.sidebar:
 
     st.divider()
     usar_n_est = st.toggle(
-        "Recalcular MTBF / MTTR con N_est (repeticiones)",
-        value=False,
-        help="Usa el total de fallas ESTIMADO (≈9 según tareas) en lugar de las 5 "
-             "registradas oficialmente. Se aparta del enunciado y se marca como hipótesis.",
+        "Supuesto con repetición (N_est ≈ 9 fallas/año)",
+        value=False, key="usar_n_est",
+        help="Desglosa cada falla registrada en sus ocurrencias repetidas según la "
+             "estimación por tareas: F1→2, F2→1, F3→2, F4→2 y F5→2 (9 filas). "
+             "La tabla se regenera conservando las filas que hayas agregado; con "
+             "'Restaurar datos originales' vuelve a los 5 registros del TP.",
     )
 
     st.divider()
@@ -311,19 +372,17 @@ with st.sidebar:
             st.markdown(f"**{k}.** {v}")
 
 # ==============================================================================
-# 4) DATAFRAMES BASE
+# 4) DATAFRAMES BASE Y ESTIMACIÓN DE REPETICIONES
 # ==============================================================================
-df_fallas = pd.DataFrame(DATOS_FALLAS)
-df_fallas["Costo_Parada_USD"] = df_fallas["ttp"] * costo_par
-df_fallas["Costo_MO_USD"]     = df_fallas["hh"]  * costo_hh
-df_fallas["Costo_Total_USD"]  = (df_fallas["Costo_Parada_USD"]
-                                 + df_fallas["repuestos"]
-                                 + df_fallas["Costo_MO_USD"])
+# Base canónica del TP (F1..F5) con tarea/descripción/t0/cuadrilla. La tabla
+# operativa real (con ediciones del usuario) se define dentro de la Pestaña 2.
+df_fallas_base = pd.DataFrame(DATOS_FALLAS)
 
-# Estimación de repeticiones (t0/cuadrilla editables; se recalculan a partir
-# de la tabla devuelta por el data_editor dentro de la Pestaña 3).
-df_estim = df_fallas[["evento", "subsistema", "tarea", "ttp", "hh", "repuestos",
-                      "t0", "cuadrilla"]].copy()
+# Estimación de repeticiones sobre eventos canónicos: usa t0/cuadrilla del TP
+# más las ediciones vigentes (t0/cuadrilla) del editor de la Pestaña 3.
+df_estim = df_fallas_base[["evento", "subsistema", "tarea", "ttp", "hh", "repuestos",
+                           "t0", "cuadrilla"]].copy()
+df_estim = _aplicar_ediciones_estim(df_estim)
 df_estim = estimar_repeticiones(df_estim)
 N_est_total = int(df_estim["N_est"].sum())
 
@@ -331,21 +390,8 @@ N_est_total = int(df_estim["N_est"].sum())
 N_por_sub = df_estim.groupby("subsistema")["N_est"].sum()
 F_sugerido = N_por_sub.apply(factor_frecuencia)
 
-# KPIs
-TTP_total = float(df_fallas["ttp"].sum())
-TFR = TOP_anio - TTP_total
-if usar_n_est:
-    N_activo   = N_est_total
-    etiqueta_N = "N (estimado)"
-    MTBF = TFR / N_est_total
-    MTTR = TTP_total / N_est_total
-else:
-    N_activo   = len(df_fallas)
-    etiqueta_N = "N (oficial)"
-    MTBF = TFR / len(df_fallas)
-    MTTR = TTP_total / len(df_fallas)
-Ai = MTBF / (MTBF + MTTR) * 100
-Ao = TFR / TOP_anio * 100
+# KPIs: se calculan dentro de la Pestaña 2, en vivo, sobre la tabla editada
+# del usuario (df_fallas) con N = cantidad de filas vigentes.
 
 # ==============================================================================
 # 5) PESTAÑAS
@@ -401,23 +447,97 @@ with tab_taxo:
                 st.divider()
 
 # -------------------------------------------------------------------------------
-# PESTAÑA 2 - REGISTRO DE FALLAS Y KPIs DE CONFIABILIDAD
+# PESTAÑA 2 - REGISTRO EDITABLE DE FALLAS Y KPIs DE CONFIABILIDAD
 # -------------------------------------------------------------------------------
 with tab_kpi:
-    cols_tabla = ["evento", "subsistema", "componente", "ttp", "Costo_Parada_USD",
-                  "repuestos", "hh", "Costo_MO_USD", "Costo_Total_USD"]
+    est = st.session_state
+    if "sup_aplicado__fallas" not in est:
+        est["sup_aplicado__fallas"] = usar_n_est
+    if "fallas_custom" not in est:
+        est["fallas_custom"] = []
+
+    # Al cambiar el supuesto se regenera la base canónica, conservando las filas
+    # que el usuario hubiera agregado (se vuelcan al editar la tabla).
+    if est["sup_aplicado__fallas"] != usar_n_est:
+        est["sup_aplicado__fallas"] = usar_n_est
+        if "editor_fallas" in est:
+            del est["editor_fallas"]
+
+    st.subheader("Registro editable de fallas del ciclo anual")
+    col_tit, col_reset = st.columns([3, 1])
+    with col_tit:
+        st.caption("Agregue, borre o edite filas (Evento, Subsistema, Componente, "
+                   "TTP, Repuestos, HH). Los costos derivados y los KPIs se "
+                   "recalculan en vivo; la fila TOTAL queda bajo la tabla.")
+    with col_reset:
+        if st.button("Restaurar datos originales del TP (estado inicial)",
+                     help="Vuelve a los 5 registros oficiales (F1-F5), sin repetición "
+                          "y sin filas agregadas."):
+            st.session_state["reiniciar_registro"] = True
+            st.rerun()
+
+    base_fallas = generar_fallas_supuesto(usar_n_est, df_estim)
+    etiquetas_canon = set(base_fallas["evento"])
+    df_pasado = pd.concat([base_fallas, pd.DataFrame(est["fallas_custom"])],
+                          ignore_index=True)
+
+    col_editor = {
+        "evento": st.column_config.TextColumn("Evento", width="small",
+                                              help="Código de la falla (F1..F5 o nueva)"),
+        "subsistema": st.column_config.TextColumn("Subsistema"),
+        "componente": st.column_config.TextColumn("Componente", width="large"),
+        "ttp": st.column_config.NumberColumn("TTP (h)", min_value=0.0, step=0.5,
+                                             format="%.1f"),
+        "repuestos": st.column_config.NumberColumn("Repuestos (USD)", min_value=0.0,
+                                                   step=50.0, format="%.0f"),
+        "hh": st.column_config.NumberColumn("HH", min_value=0.0, step=1.0,
+                                            format="%.0f"),
+    }
+    df_edit = st.data_editor(
+        df_pasado,
+        column_config=col_editor,
+        num_rows="dynamic",
+        column_order=["evento", "subsistema", "componente", "ttp", "repuestos", "hh"],
+        key="editor_fallas", width="stretch", hide_index=True)
+
+    # Custodiar las filas agregadas por el usuario para conservarlas al cambiar
+    # de supuesto o regenerar la base.
+    df_custom = df_edit[~df_edit["evento"].isin(etiquetas_canon)]
+    est["fallas_custom"] = df_custom.to_dict("records")
+
+    # --- Recalcular costos derivados y KPIs sobre la tabla editada -----------
+    df_fallas = df_edit.copy()
+    for c in ("ttp", "repuestos", "hh"):
+        df_fallas[c] = pd.to_numeric(df_fallas[c], errors="coerce").fillna(0.0)
+    df_fallas["Costo_Parada_USD"] = df_fallas["ttp"] * costo_par
+    df_fallas["Costo_MO_USD"]     = df_fallas["hh"]  * costo_hh
+    df_fallas["Costo_Total_USD"]  = (df_fallas["Costo_Parada_USD"]
+                                     + df_fallas["repuestos"]
+                                     + df_fallas["Costo_MO_USD"])
+
+    N_activo = len(df_fallas)
+    TTP_total = float(df_fallas["ttp"].sum())
+    TFR = TOP_anio - TTP_total
+    if N_activo > 0:
+        MTBF = TFR / N_activo
+        MTTR = TTP_total / N_activo
+    else:
+        MTBF, MTTR = float("nan"), float("nan")
+    Ai = MTBF / (MTBF + MTTR) * 100
+    Ao = TFR / TOP_anio * 100
+
+    cols_tabla = ["evento", "subsistema", "ttp", "Costo_Parada_USD", "repuestos",
+                  "hh", "Costo_MO_USD", "Costo_Total_USD"]
     tabla = df_fallas[cols_tabla].copy()
-    tabla.columns = ["Evento", "Subsistema", "Componente", "TTP (h)",
-                     "Costo Parada (USD)", "Repuestos (USD)", "HH",
-                     "Costo MO (USD)", "Costo Total (USD)"]
-    total_row = pd.DataFrame([["TOTAL", "—", f"{len(df_fallas)} eventos", TTP_total,
-                               df_fallas["Costo_Parada_USD"].sum(), df_fallas["repuestos"].sum(),
-                               df_fallas["hh"].sum(), df_fallas["Costo_MO_USD"].sum(),
+    tabla.columns = ["Evento", "Subsistema", "TTP (h)", "Costo Parada (USD)",
+                     "Repuestos (USD)", "HH", "Costo MO (USD)", "Costo Total (USD)"]
+    total_row = pd.DataFrame([["TOTAL", "—", TTP_total,
+                               df_fallas["Costo_Parada_USD"].sum(),
+                               df_fallas["repuestos"].sum(), df_fallas["hh"].sum(),
+                               df_fallas["Costo_MO_USD"].sum(),
                                df_fallas["Costo_Total_USD"].sum()]],
                              columns=tabla.columns)
     tabla = pd.concat([tabla, total_row], ignore_index=True)
-
-    st.subheader("Registro económico de las 5 fallas del ciclo anual")
     st.dataframe(tabla.style.format({
         "TTP (h)": "{:,.1f}",
         "Costo Parada (USD)": lambda x: f"${x:,.0f}",
@@ -428,21 +548,24 @@ with tab_kpi:
         width="stretch", hide_index=True)
 
     if usar_n_est:
-        st.info(f"Modo **N_est activado**: los KPIs usan la cantidad estimada de "
-                f"repeticiones ({N_est_total} fallas/año) en lugar de las 5 oficiales. "
-                "TTP total y TFR se mantienen iguales (120 h y TFR derivado).")
+        st.info(f"Supuesto **con repetición**: cada falla se desglosó según N_est "
+                f"(estimación por tareas, {N_est_total} fallas/año). TTP total y TFR "
+                "se mantienen iguales (120 h y TFR derivado).")
+    else:
+        st.caption("Supuesto **sin repetición**: registros oficiales del TP (5 fallas).")
 
     st.markdown("### Indicadores de Confiabilidad y Disponibilidad")
     k1, k2, k3, k4 = st.columns(4)
     k1.metric("Tiempo Operativo Programado (TOP)", f"{TOP_anio:,.0f} h",
               help="TOP = tiempo programado de operación anual")
     k2.metric("Tiempo Total de Paradas (TTP)", f"{TTP_total:,.0f} h",
-              help=f"Σ TTP de los {len(df_fallas)} eventos")
+              help=f"Σ TTP de las {N_activo} filas vigentes")
     k3.metric("Funcionamiento Real (TFR)", f"{TFR:,.0f} h",
               help="TFR = TOP − TTP")
     k4.metric("N° de Fallas", f"{N_activo}",
-              help=etiqueta_N + (" · hipótesis de repetición por tareas" if usar_n_est else
-                                 " · registradas oficialmente"))
+              help="N = cantidad de filas vigentes de la tabla"
+                   + (" · hipótesis de repetición por tareas" if usar_n_est else
+                      " · registradas oficialmente"))
 
     k5, k6, k7, k8 = st.columns(4)
     k5.metric("MTBF", f"{MTBF:,.2f} h",
@@ -456,8 +579,10 @@ with tab_kpi:
 
     st.caption("Nota: Ai = Ao cuando no hubo paradas por mantenimiento preventivo "
                "(todo el tiempo fuera de servicio correspondió a reparación).")
-    st.caption("Con N_est: MTBF = 7.080/9 ≈ 787 h y MTTR = 120/9 ≈ 13,3 h/falla "
-               "(la estimación no altera Ai/Ao porque ambos colapsan a TFR/TOP).")
+    if usar_n_est:
+        st.caption(f"Referencia del supuesto: MTBF ≈ {TFR/N_est_total:,.1f} h "
+                   f"y MTTR ≈ {TTP_total/N_est_total:,.1f} h/falla "
+                   "(la estimación no altera Ai/Ao porque ambos colapsan a TFR/TOP).")
 
 # -------------------------------------------------------------------------------
 # PESTAÑA 3 - MATRIZ DE CRITICIDAD DINÁMICA
