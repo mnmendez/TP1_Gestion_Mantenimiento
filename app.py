@@ -134,19 +134,112 @@ CRITICIDAD_DEF = [
     {"Subsistema": "Sistema Eléctrico / Seguridad",     "S": 3, "A": 1, "O": 3,  "D": 1},
 ]
 
-# Taxonomía ISO 14224 (5 niveles del app) con códigos y nivel padre
+# Taxonomía ISO 14224 (6 niveles: Industria→Planta→Área→Equipo→Sistema→Componente)
+# con códigos y nivel padre. Los niveles intermedios normativos (Categoría de negocio
+# e Instalación) se condensan para reflejar el arbolado pedido por la consigna.
 TAXONOMIA = [
     # nivel, tipo, código, denominación, padre
-    (1, "INDUSTRIA", "IND-01", "Industria Minera y de Procesamiento de Minerales", None),
-    (2, "PLANTA",    "PLT-01", "Planta de Alimentación Continua y Reacción", "IND-01"),
-    (3, "ÁREA",      "ARE-01", "Área de Elevación y Carga de Áridos al Reactor", "PLT-01"),
-    (4, "SISTEMA",   "SYS-01", "Línea de Transporte de Áridos (Cinta CT-01)", "ARE-01"),
-    (5, "SUBSISTEMA","SUB-01", "Sistema Motriz (accionamiento y reducción)", "SYS-01"),
-    (5, "SUBSISTEMA","SUB-02", "Banda y Rodillos (banda, tambores y rascadores)", "SYS-01"),
-    (5, "SUBSISTEMA","SUB-03", "Estructura / Tolva (soporte y alimentación)", "SYS-01"),
-    (5, "SUBSISTEMA","SUB-04", "Sistema de Tensión (oleohidráulico 20 bar)", "SYS-01"),
-    (5, "SUBSISTEMA","SUB-05", "Sistema Eléctrico / Seguridad (sensores y protecciones)", "SYS-01"),
+    (1, "INDUSTRIA",   "IND-01",   "Industria Minera y de Procesamiento de Minerales", None),
+    (2, "PLANTA",      "PLT-01",   "Planta de Alimentación Continua y Reacción", "IND-01"),
+    (3, "ÁREA",        "ARE-01",   "Área de Elevación y Carga de Áridos al Reactor", "PLT-01"),
+    (4, "EQUIPO",      "EQ-01",    "Línea de Transporte de Áridos (Cinta CT-01)", "ARE-01"),
+    (5, "SISTEMA",     "SUB-01",   "Sistema Motriz (accionamiento y reducción)", "EQ-01"),
+    (5, "SISTEMA",     "SUB-02",   "Banda y Rodillos (banda, tambores y rascadores)", "EQ-01"),
+    (5, "SISTEMA",     "SUB-03",   "Estructura / Tolva (soporte y alimentación)", "EQ-01"),
+    (5, "SISTEMA",     "SUB-04",   "Sistema de Tensión (oleohidráulico 20 bar)", "EQ-01"),
+    (5, "SISTEMA",     "SUB-05",   "Sistema Eléctrico / Seguridad (sensores y protecciones)", "EQ-01"),
+    (6, "COMPONENTE",  "COM-011",  "Motor asincrónico trifásico 55 kW", "SUB-01"),
+    (6, "COMPONENTE",  "COM-012",  "Reductor ortogonal de ejes paralelos (3 etapas)", "SUB-01"),
+    (6, "COMPONENTE",  "COM-013",  "Polea motriz Ø500 mm + eje SAE 4140 + rodamientos 22220 EK", "SUB-01"),
+    (6, "COMPONENTE",  "COM-021",  "Banda transportadora de goma", "SUB-02"),
+    (6, "COMPONENTE",  "COM-022",  "Tambor de reenvío y rodillos de apoyo", "SUB-02"),
+    (6, "COMPONENTE",  "COM-023",  "Rascadores primario (uretano) y secundario (metal duro)", "SUB-02"),
+    (6, "COMPONENTE",  "COM-031",  "Estructura metálica y caballetes", "SUB-03"),
+    (6, "COMPONENTE",  "COM-032",  "Tolva de recepción de árido", "SUB-03"),
+    (6, "COMPONENTE",  "COM-041",  "Centralita oleohidráulica (bomba de engranajes)", "SUB-04"),
+    (6, "COMPONENTE",  "COM-042",  "Cilindro hidráulico de doble efecto y latiguillos HP", "SUB-04"),
+    (6, "COMPONENTE",  "COM-043",  "Presostatos de seguridad", "SUB-04"),
+    (6, "COMPONENTE",  "COM-051",  "Tablero eléctrico y arrancador suave", "SUB-05"),
+    (6, "COMPONENTE",  "COM-052",  "Sensores inductivos de desalineación de banda", "SUB-05"),
+    (6, "COMPONENTE",  "COM-053",  "Tirador de emergencia y circuitos de seguridad", "SUB-05"),
 ]
+
+# Descripción de cada nivel de la taxonomía según norma ISO 14224 / consigna del TP.
+NIVELES_ISO = {
+    1: "Industria",
+    2: "Planta",
+    3: "Área",
+    4: "Equipo",
+    5: "Sistema",
+    6: "Componente",
+}
+
+# ==============================================================================
+# 1b) HELPERS DE TAXONOMÍA (árbol, niveles, listado directo y escalonado)
+# ==============================================================================
+def taxonomia_df():
+    """DataFrame canónico de la taxonomía ISO 14224."""
+    return pd.DataFrame(TAXONOMIA, columns=["Nivel", "Tipo", "Código", "Denominación", "Código padre"])
+
+
+def _build_tree(jer):
+    """Construye un árbol dirigido {código: [hijos]} a partir del campo padre."""
+    hijos = {r["Código"]: [] for _, r in jer.iterrows()}
+    raices = []
+    for _, r in jer.iterrows():
+        padre = r["Código padre"]
+        if padre is None or pd.isna(padre) or padre == "":
+            raices.append(r["Código"])
+        elif padre in hijos:
+            hijos[padre].append(r["Código"])
+    return hijos, raices
+
+
+def dataframe_directo():
+    """Listado directo (tabla) con el orden lógico de campos solicitado."""
+    jer = taxonomia_df()
+    denom = jer.set_index("Código")["Denominación"].to_dict()
+
+    def desc_padre(cod):
+        return denom.get(cod, "—")
+
+    df = jer.copy()
+    df["Descripción del nivel"] = df["Nivel"].map(NIVELES_ISO)
+    df["Descripción del equipo padre"] = df["Código padre"].fillna("").map(desc_padre)
+    # Orden lógico: nivel -> descripción del nivel -> código -> descripción ->
+    # tipo -> código padre -> descripción del padre
+    df = df.rename(columns={
+        "Código": "Código del equipo",
+        "Denominación": "Descripción del equipo",
+        "Tipo": "Tipo de equipo",
+        "Código padre": "Equipo padre",
+    })
+    return df[["Nivel", "Descripción del nivel", "Código del equipo",
+               "Descripción del equipo", "Tipo de equipo", "Equipo padre",
+               "Descripción del equipo padre"]]
+
+
+def dataframe_escalonado():
+    """Listado escalonado (plano con columna de ruta completa para CSV)."""
+    df = dataframe_directo()
+    jer = taxonomia_df()
+    denom = jer.set_index("Código")["Denominación"].to_dict()
+    hijos, raices = _build_tree(jer)
+
+    ruta = {}
+    def recorrer(cod, prefijo):
+        if prefijo == "":
+            ruta[cod] = denom[cod]
+        else:
+            ruta[cod] = prefijo + " > " + denom[cod]
+        for h in hijos.get(cod, []):
+            recorrer(h, ruta[cod])
+
+    for r in raices:
+        recorrer(r, "")
+
+    df["Ruta completa"] = df["Código del equipo"].map(ruta)
+    return df
 
 # Fichas técnicas de componentes y función del equipo (Tab 1)
 FICHAS = {
@@ -408,31 +501,95 @@ tab_taxo, tab_kpi, tab_matriz, tab_dash, tab_excel = st.tabs(
 # -------------------------------------------------------------------------------
 with tab_taxo:
     st.subheader("Jerarquía del activo - Taxonomía ISO 14224")
-    st.caption("Industria → Planta → Área → Sistema → Subsistemas. Cada nivel "
-               "explícita su nivel padre y genera la trazabilidad de las decisiones.")
+    st.caption("Industria → Planta → Área → Equipo → Sistema → Componente. Cada "
+               "nivel explícita su nivel padre y genera la trazabilidad de las "
+               "decisiones (reemplazo vs. reparación) según la consigna del TP.")
 
-    jer = pd.DataFrame(TAXONOMIA, columns=["Nivel", "Tipo", "Código", "Denominación", "Nivel padre"])
-    jer["Nivel padre"] = jer["Nivel padre"].fillna("—")
+    # Selector de modo de visualización
+    modo = st.radio(
+        "Modo de visualización",
+        ["Escalonado (árbol)", "Listado directo (tabla)"],
+        horizontal=True,
+        help="Escalonado: jerarquía desplegable con sus hijos anidados. "
+             "Listado directo: tabla plana con el detalle de cada equipo.",
+    )
 
-    # Renderizado HTML del árbol escalonado
-    colores = {1: "#2E75B6", 2: "#2E8B57", 3: "#E67E22", 4: "#8E44AD", 5: "#1F4E79"}
-    html = ["<div style='font-family:Consolas,monospace;'>"]
-    for _, r in jer.iterrows():
-        nivel = int(r["Nivel"])
-        indent = "&nbsp;&nbsp;" * (nivel - 1)
-        color = colores[nivel]
-        borde = "2px solid " + color if nivel == 5 else "1px solid #ccc"
-        html.append(
-            f"{indent}<div style='border-left:{borde};border-radius:4px;padding:4px 8px;"
-            f"margin:3px 0;background:#fff'>"
-            f"<b style='color:{color}'>(L{r['Nivel']}) {r['Tipo']}</b> "
-            f"[{r['Código']}] - {r['Denominación']} "
-            f"<span style='color:#888'>· padre: <b>{r['Nivel padre']}</b></span></div>")
-    html.append("</div>")
-    st.markdown("".join(html), unsafe_allow_html=True)
+    # --- Utilidades para descargas CSV -------------------------------
+    def to_csv_bytes(df):
+        return df.to_csv(index=False).encode("utf-8-sig")
 
-    with st.expander("Ver tabla taxonómica (niveles, códigos y padre)"):
-        st.dataframe(jer, width="stretch", hide_index=True)
+    if modo == "Escalonado (árbol)":
+        # ------------------------------------------------------------------
+        # MODO ESCALONADO: árbol jerárquico con st.expander anidados
+        # ------------------------------------------------------------------
+        st.markdown("Despliegue cada jerarquía para ver sus hijos. Puede ocultar "
+                    "(colapsar) cualquier nivel de forma independiente.")
+
+        jer = taxonomia_df()
+        hijos, raices = _build_tree(jer)
+        etiqueta = {
+            r["Código"]: (int(r["Nivel"]), r["Tipo"], r["Código"], r["Denominación"])
+            for _, r in jer.iterrows()
+        }
+        colores = {1: "#2E75B6", 2: "#2E8B57", 3: "#E67E22", 4: "#8E44AD", 5: "#1F4E79", 6: "#7F8C8D"}
+
+        def mostrar_nodo(codigo):
+            nivel, tipo, cod, denom = etiqueta[codigo]
+            color = colores.get(nivel, "#1F4E79")
+            hijos_nodo = hijos.get(codigo, [])
+            etiqueta_linea = f"(L{nivel}) {tipo} — **[ {cod} ]** {denom}"
+            if hijos_nodo:
+                with st.expander(etiqueta_linea + f"  ·  {len(hijos_nodo)} hijo(s)",
+                                 expanded=(nivel <= 1)):
+                    st.markdown(
+                        f"<div style='border-left:3px solid {color};padding-left:8px;"
+                        f"color:#555;font-size:0.85rem'>{denom}</div>",
+                        unsafe_allow_html=True)
+                    for h in hijos_nodo:
+                        mostrar_nodo(h)
+            else:
+                st.markdown(
+                    f"<div style='border-left:3px solid {color};padding:2px 8px;"
+                    f"margin:2px 0'><b>[{cod}]</b> <span"
+                    f"style='color:{color}'>(L{nivel}) {tipo}</span> · {denom}</div>",
+                    unsafe_allow_html=True)
+
+        for r in raices:
+            mostrar_nodo(r)
+
+        col_csv, col_n = st.columns([1, 3])
+        with col_csv:
+            st.download_button(
+                "⬇  Descargar taxonomía escalonada (CSV)",
+                data=to_csv_bytes(dataframe_escalonado()),
+                file_name="taxonomia_escalonada.csv",
+                mime="text/csv",
+            )
+        with col_n:
+            st.caption("El CSV incluye la columna **Ruta completa** (Industria > "
+                       "Planta > …) para reconstruir la jerarquía en Excel u otras "
+                       "herramientas.")
+
+    else:
+        # ------------------------------------------------------------------
+        # MODO LISTADO DIRECTO: tabla plana con detalle de cada equipo
+        # ------------------------------------------------------------------
+        df_directo = dataframe_directo()
+        st.dataframe(df_directo, width="stretch", hide_index=True)
+
+        col_csv, col_n = st.columns([1, 3])
+        with col_csv:
+            st.download_button(
+                "⬇  Descargar listado directo (CSV)",
+                data=to_csv_bytes(df_directo),
+                file_name="taxonomia_listado_directo.csv",
+                mime="text/csv",
+            )
+        with col_n:
+            st.caption("Campos ordenados: nivel, descripción del nivel, código del "
+                       "equipo, descripción, tipo, equipo padre y descripción del padre.")
+
+    st.divider()
 
     # Fichas técnicas de los subsistemas
     st.markdown("### Fichas técnicas de los subsistemas")
