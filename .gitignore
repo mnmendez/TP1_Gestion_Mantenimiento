@@ -11,6 +11,7 @@ env/
 
 # Documentos internos de la cátedra / contexto
 agent.md
+.agents/
 
 # Sistema
 Thumbs.db
