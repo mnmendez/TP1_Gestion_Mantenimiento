@@ -397,23 +397,26 @@
         <button onclick="cambiarPestana('tab-taxo')" id="btn-tab-taxo" class="tab-btn px-3.5 py-2 rounded-xl font-medium transition text-white bg-blue-600 shadow-sm flex items-center gap-1.5 whitespace-nowrap">
           <span>1.</span> Taxonomía ISO 14224
         </button>
+        <button onclick="cambiarPestana('tab-inspeccion')" id="btn-tab-inspeccion" class="tab-btn px-3.5 py-2 rounded-xl font-medium transition text-slate-400 hover:text-slate-200 hover:bg-slate-800 flex items-center gap-1.5 whitespace-nowrap">
+          <span>2.</span> Ruta de Inspección & OTs
+        </button>
         <button onclick="cambiarPestana('tab-kpis')" id="btn-tab-kpis" class="tab-btn px-3.5 py-2 rounded-xl font-medium transition text-slate-400 hover:text-slate-200 hover:bg-slate-800 flex items-center gap-1.5 whitespace-nowrap">
-          <span>2.</span> Fallas y KPIs
+          <span>3.</span> Fallas y KPIs
         </button>
         <button onclick="cambiarPestana('tab-criticidad')" id="btn-tab-criticidad" class="tab-btn px-3.5 py-2 rounded-xl font-medium transition text-slate-400 hover:text-slate-200 hover:bg-slate-800 flex items-center gap-1.5 whitespace-nowrap">
-          <span>3.</span> Criticidad Dinámica
+          <span>4.</span> Criticidad Dinámica
         </button>
         <button onclick="cambiarPestana('tab-causa-raiz')" id="btn-tab-causa-raiz" class="tab-btn px-3.5 py-2 rounded-xl font-medium transition text-slate-400 hover:text-slate-200 hover:bg-slate-800 flex items-center gap-1.5 whitespace-nowrap">
-          <span>4.</span> Causa Raíz (Ishikawa & 5 Whys)
+          <span>5.</span> Causa Raíz (Ishikawa & 5 Whys)
         </button>
         <button onclick="cambiarPestana('tab-nowlan')" id="btn-tab-nowlan" class="tab-btn px-3.5 py-2 rounded-xl font-medium transition text-slate-400 hover:text-slate-200 hover:bg-slate-800 flex items-center gap-1.5 whitespace-nowrap">
-          <span>5.</span> Curvas Nowlan & Heap
+          <span>6.</span> Curvas Nowlan & Heap
         </button>
         <button onclick="cambiarPestana('tab-dash')" id="btn-tab-dash" class="tab-btn px-3.5 py-2 rounded-xl font-medium transition text-slate-400 hover:text-slate-200 hover:bg-slate-800 flex items-center gap-1.5 whitespace-nowrap">
-          <span>6.</span> Dashboard Gráficos
+          <span>7.</span> Dashboard Gráficos
         </button>
         <button onclick="cambiarPestana('tab-informe')" id="btn-tab-informe" class="tab-btn px-3.5 py-2 rounded-xl font-medium transition text-slate-400 hover:text-slate-200 hover:bg-slate-800 flex items-center gap-1.5 whitespace-nowrap">
-          <span>7.</span> Informe Técnico Oficial
+          <span>8.</span> Informe Técnico Oficial
         </button>
       </div>
 
@@ -431,14 +434,22 @@
             </div>
           </div>
 
-          <!-- ÁRBOL JERÁRQUICO COMPLETO A 6 NIVELES -->
+          <!-- ÁRBOL JERÁRQUICO COMPLETO SEGÚN ISO 14224 (NIVELES 1 A 8) -->
           <div class="space-y-4 font-mono text-xs bg-slate-950 p-5 rounded-xl border border-slate-800/80">
             
-            <!-- NIVEL 2: PLANTA / COMPLEJO INDUSTRIAL -->
+            <!-- NIVEL 1: INDUSTRIA / RUBRO -->
             <div class="flex items-center gap-2 text-slate-300">
-              <span class="px-2 py-0.5 rounded bg-slate-800 text-[10px] text-slate-200 font-sans font-bold border border-slate-700">Nivel 2 · Instalación</span>
-              <span class="text-white font-bold font-sans">Complejo Industrial Minero:</span> Planta de Clasificación y Procesamiento de Áridos de Alta Densidad
+              <span class="px-2 py-0.5 rounded bg-blue-950 text-[10px] text-blue-300 font-sans font-bold border border-blue-800">Nivel 1 · Industria</span>
+              <span class="text-white font-bold font-sans">Industria Minera y Tratamiento de Minerales:</span> Extracción, Clasificación y Molienda de Áridos de Alta Densidad
             </div>
+
+            <div class="ml-3 sm:ml-5 pl-3 sm:pl-4 border-l-2 border-blue-900/50 space-y-4">
+
+              <!-- NIVEL 2: PLANTA / COMPLEJO INDUSTRIAL -->
+              <div class="flex items-center gap-2 text-slate-300">
+                <span class="px-2 py-0.5 rounded bg-slate-800 text-[10px] text-slate-200 font-sans font-bold border border-slate-700">Nivel 2 · Instalación / Complejo</span>
+                <span class="text-slate-200 font-bold font-sans">Complejo Industrial Minero:</span> Planta de Clasificación y Procesamiento Continuo a Reactores
+              </div>
 
             <div class="ml-3 sm:ml-5 pl-3 sm:pl-4 border-l-2 border-slate-800 space-y-4">
               
@@ -720,6 +731,13 @@
                 </thead>
                 <tbody class="divide-y divide-slate-800 text-slate-300">
                   <tr>
+                    <td class="p-2 text-center text-blue-400 font-bold">Nivel 1</td>
+                    <td class="p-2 font-sans font-semibold text-white">Industry (Industria)</td>
+                    <td class="p-2 font-sans text-slate-400">Omitido en enunciado (asumido por contexto)</td>
+                    <td class="p-2">Industria Minera y Tratamiento de Áridos</td>
+                    <td class="p-2 font-sans text-slate-400">Cúspide canónica ISO 14224 (Cláusula 6.2). Define el sector productivo y normas aplicables.</td>
+                  </tr>
+                  <tr>
                     <td class="p-2 text-center text-blue-400 font-bold">Nivel 2</td>
                     <td class="p-2 font-sans font-semibold text-white">Business Category / Installation</td>
                     <td class="p-2 font-sans">Complejo / Planta</td>
@@ -897,7 +915,663 @@
       </section>
 
       <!-- =================================================================== -->
-      <!-- PESTAÑA 2: REGISTRO DE FALLAS Y KPIS (CON SIMULADOR STANDBY) -->
+      <!-- PESTAÑA 2: PLAN DE INSPECCIÓN RUTINARIA, CHECK DE ARRANQUE & OTS -->
+      <!-- =================================================================== -->
+      <section id="tab-inspeccion" class="tab-content hidden space-y-6">
+        <div class="theme-card border rounded-2xl p-6 shadow-sm card-print space-y-6">
+          
+          <!-- ENCABEZADO Y SELECTOR DE SUBVISTAS -->
+          <div class="flex flex-wrap items-center justify-between gap-4 border-b pb-4" style="border-color: var(--border-sub)">
+            <div>
+              <h2 class="text-lg font-bold flex items-center gap-2">
+                <span>🔎</span> Plan de Tareas de Inspección & Estandarización de OTs
+              </h2>
+              <p class="text-xs text-slate-400">
+                Consigna 2: Ruta rutinaria dividida en control sensorial (Operador / TPM) y mediciones instrumentales (Predictivo CBM), con checklist de arranque y estándares de emisión de OTs.
+              </p>
+            </div>
+
+            <!-- SUB-NAVEGADOR DE INSPECCIÓN -->
+            <div class="flex flex-wrap items-center gap-1.5 bg-slate-900 p-1 rounded-xl border border-slate-800 text-xs">
+              <button onclick="setSubvistaInspeccion('check')" id="btn-sub-check" class="px-3 py-1.5 rounded-lg bg-blue-600 text-white font-medium transition flex items-center gap-1">
+                <span>📋</span> Check de Arranque (TPM)
+              </button>
+              <button onclick="setSubvistaInspeccion('ruta')" id="btn-sub-ruta" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white font-medium transition flex items-center gap-1">
+                <span>🔬</span> Ruta Instrumental (5 Estaciones)
+              </button>
+              <button onclick="setSubvistaInspeccion('ot')" id="btn-sub-ot" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white font-medium transition flex items-center gap-1">
+                <span>📑</span> Estándar de OTs (GMAO)
+              </button>
+            </div>
+          </div>
+
+          <!-- =============================================================== -->
+          <!-- SUB-VISTA 1: CHECK DE ARRANQUE & PLANILLA DIARIA (TPM / CIL) -->
+          <!-- =============================================================== -->
+          <div id="subvista-check" class="space-y-5">
+            <div class="flex flex-wrap items-center justify-between gap-3 bg-slate-950 p-4 rounded-xl border border-slate-800">
+              <div class="space-y-1">
+                <span class="text-xs font-bold uppercase tracking-wider text-blue-400 block font-mono">
+                  Planilla de Mantenimiento Autónomo (TPM) · Rutina CIL de Pre-Arranque
+                </span>
+                <p class="text-[11px] text-slate-300">
+                  Control diario previo a la energización de la <strong>Cinta Transportadora CV-01</strong>. Detecte anomalías incipientes antes de la puesta en marcha para evitar paradas catastróficas.
+                </p>
+              </div>
+
+              <!-- BOTONES DE ACCIÓN RÁPIDA -->
+              <div class="flex items-center gap-2 text-xs">
+                <button onclick="marcarTodoCheckConforme()" class="px-3 py-1 rounded-lg bg-emerald-900/50 hover:bg-emerald-800 text-emerald-200 border border-emerald-700/60 transition font-medium">
+                  ✓ Marcar Todo Conforme (OK)
+                </button>
+                <button onclick="simularFallaCheck()" class="px-3 py-1 rounded-lg bg-rose-900/50 hover:bg-rose-800 text-rose-200 border border-rose-700/60 transition font-medium">
+                  ⚠️ Simular Anomalía Crítica
+                </button>
+                <button onclick="restaurarCheck()" class="px-2.5 py-1 text-slate-400 hover:text-slate-200 transition text-[11px]">
+                  Restaurar
+                </button>
+              </div>
+            </div>
+
+            <!-- BANNER DINÁMICO DE AUTORIZACIÓN DE ARRANQUE -->
+            <div id="check-status-banner" class="p-4 rounded-xl bg-emerald-950/40 border border-emerald-600/60 flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <span id="check-status-icon" class="text-2xl">🟢</span>
+                <div>
+                  <h4 id="check-status-title" class="font-bold text-emerald-300 text-sm uppercase tracking-wide">
+                    CONDICIÓN SEGURA — AUTORIZADO PARA PUESTA EN MARCHA
+                  </h4>
+                  <p id="check-status-desc" class="text-xs text-slate-300">
+                    Los 8 puntos sensoriales de control de pre-arranque cumplen los estándares admisibles. Lazo de seguridad cerrado.
+                  </p>
+                </div>
+              </div>
+              <span id="check-status-badge" class="px-3 py-1 rounded-lg bg-emerald-900/80 text-emerald-200 font-mono text-xs font-bold border border-emerald-500">
+                PUESTA EN MARCHA HABILITADA
+              </span>
+            </div>
+
+            <!-- METADATOS DE PLANILLA TIPO INDUSTRIAL -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs bg-slate-900/80 p-3 rounded-xl border border-slate-800 font-mono">
+              <div><span class="text-slate-500 block text-[10px]">EQUIPO / TAG:</span><strong class="text-white">CV-01 (Cinta Áridos)</strong></div>
+              <div><span class="text-slate-500 block text-[10px]">RÉGIMEN:</span><strong class="text-white">Continuo (7,200 h/año)</strong></div>
+              <div><span class="text-slate-500 block text-[10px]">FRECUENCIA:</span><strong class="text-blue-400">Diaria (Inicio de Turno)</strong></div>
+              <div><span class="text-slate-500 block text-[10px]">RESPONSABLE:</span><strong class="text-emerald-400">Operador de Turno / TPM</strong></div>
+            </div>
+
+            <!-- TABLA DE LOS 8 PUNTOS DE CONTROL SENSORIAL -->
+            <div class="overflow-x-auto rounded-xl border border-slate-800">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-slate-800 text-slate-200 font-mono">
+                  <tr>
+                    <th class="p-2.5 text-center w-10">Punto</th>
+                    <th class="p-2.5">Punto de Inspección & Subsistema</th>
+                    <th class="p-2.5 text-center">Sentido</th>
+                    <th class="p-2.5">Estándar de Aceptación (Condición Normal)</th>
+                    <th class="p-2.5 text-center">Estado del Check</th>
+                    <th class="p-2.5">Falla que Bloquea / Acción Requerida</th>
+                  </tr>
+                </thead>
+                <tbody id="tabla-check-body" class="divide-y divide-slate-800 text-slate-300">
+                  <!-- Punto 1 -->
+                  <tr class="hover:bg-slate-900/40 transition">
+                    <td class="p-2.5 text-center font-mono font-bold text-slate-400">01</td>
+                    <td class="p-2.5">
+                      <strong class="text-white block font-sans">Rejilla y tobera de ventilador de Motor 55 kW</strong>
+                      <span class="text-[10px] text-slate-400 font-mono">SYS-MOT · Unidad Motriz</span>
+                    </td>
+                    <td class="p-2.5 text-center font-mono text-blue-300">Visual</td>
+                    <td class="p-2.5 text-[11px] leading-relaxed">
+                      Tobera y aletas de carcasa libres de costras de polvo compactado. Flujo libre de aire de refrigeración.
+                    </td>
+                    <td class="p-2.5 text-center">
+                      <select class="check-select bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs font-mono font-bold" onchange="actualizarCheckArranque()">
+                        <option value="OK" class="text-emerald-400">✓ Conforme (OK)</option>
+                        <option value="FALLA" class="text-rose-400">⚠️ No Conforme (Anomalía)</option>
+                      </select>
+                    </td>
+                    <td class="p-2.5 text-[11px] text-rose-300">
+                      <strong>Previene F2:</strong> Si hay colmatación, limpiar con aire comprimido seco antes de energizar.
+                    </td>
+                  </tr>
+
+                  <!-- Punto 2 -->
+                  <tr class="hover:bg-slate-900/40 transition">
+                    <td class="p-2.5 text-center font-mono font-bold text-slate-400">02</td>
+                    <td class="p-2.5">
+                      <strong class="text-white block font-sans">Nivel de lubricante y estanqueidad en Reductor 3 etapas</strong>
+                      <span class="text-[10px] text-slate-400 font-mono">SYS-MOT · Unidad Motriz</span>
+                    </td>
+                    <td class="p-2.5 text-center font-mono text-blue-300">Visual</td>
+                    <td class="p-2.5 text-[11px] leading-relaxed">
+                      Nivel en mirilla entre marcas MIN y MAX; aceite ámbar transparente sin emulsión blanquecina ni goteos en retenes.
+                    </td>
+                    <td class="p-2.5 text-center">
+                      <select class="check-select bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs font-mono font-bold" onchange="actualizarCheckArranque()">
+                        <option value="OK" class="text-emerald-400">✓ Conforme (OK)</option>
+                        <option value="FALLA" class="text-rose-400">⚠️ No Conforme (Anomalía)</option>
+                      </select>
+                    </td>
+                    <td class="p-2.5 text-[11px] text-slate-300">
+                      Si el nivel es bajo o lechoso, no arrancar: reportar a lubricación para reponer ISO VG 220 o inspección de sellos.
+                    </td>
+                  </tr>
+
+                  <!-- Punto 3 -->
+                  <tr class="hover:bg-slate-900/40 transition">
+                    <td class="p-2.5 text-center font-mono font-bold text-slate-400">03</td>
+                    <td class="p-2.5">
+                      <strong class="text-white block font-sans">Presión en Manómetro y Estanqueidad en Central Hidráulica</strong>
+                      <span class="text-[10px] text-slate-400 font-mono">SYS-TEN · Sistema de Tensión</span>
+                    </td>
+                    <td class="p-2.5 text-center font-mono text-blue-300">Visual</td>
+                    <td class="p-2.5 text-[11px] leading-relaxed">
+                      Presión estable en 20 bar (±1 bar); sin exudación ni ampollas en latiguillos de alta presión ni goteos en racores.
+                    </td>
+                    <td class="p-2.5 text-center">
+                      <select class="check-select bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs font-mono font-bold" onchange="actualizarCheckArranque()">
+                        <option value="OK" class="text-emerald-400">✓ Conforme (OK)</option>
+                        <option value="FALLA" class="text-rose-400">⚠️ No Conforme (Anomalía)</option>
+                      </select>
+                    </td>
+                    <td class="p-2.5 text-[11px] text-rose-300">
+                      <strong>Previene F3:</strong> Si la presión es &lt; 15 bar o hay fuga, reemplace latiguillo previo a la marcha.
+                    </td>
+                  </tr>
+
+                  <!-- Punto 4 -->
+                  <tr class="hover:bg-slate-900/40 transition">
+                    <td class="p-2.5 text-center font-mono font-bold text-slate-400">04</td>
+                    <td class="p-2.5">
+                      <strong class="text-white block font-sans">Despeje de cono y espirales en Tambor de Cola Autolimpiante</strong>
+                      <span class="text-[10px] text-slate-400 font-mono">SYS-BAN · Banda y Rodillos</span>
+                    </td>
+                    <td class="p-2.5 text-center font-mono text-blue-300">Visual</td>
+                    <td class="p-2.5 text-[11px] leading-relaxed">
+                      Conos divergentes libres de costras de áridos húmedos apelmazados. Movimiento libre y simétrico del carro tensor.
+                    </td>
+                    <td class="p-2.5 text-center">
+                      <select class="check-select bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs font-mono font-bold" onchange="actualizarCheckArranque()">
+                        <option value="OK" class="text-emerald-400">✓ Conforme (OK)</option>
+                        <option value="FALLA" class="text-rose-400">⚠️ No Conforme (Anomalía)</option>
+                      </select>
+                    </td>
+                    <td class="p-2.5 text-[11px] text-rose-300">
+                      <strong>Previene F4:</strong> Si hay colmatación, remover incrustaciones para evitar desvío y desgarro de banda.
+                    </td>
+                  </tr>
+
+                  <!-- Punto 5 -->
+                  <tr class="hover:bg-slate-900/40 transition">
+                    <td class="p-2.5 text-center font-mono font-bold text-slate-400">05</td>
+                    <td class="p-2.5">
+                      <strong class="text-white block font-sans">Alineación y Centrado de Banda en Cabeza y Retorno</strong>
+                      <span class="text-[10px] text-slate-400 font-mono">SYS-BAN · Banda y Rodillos</span>
+                    </td>
+                    <td class="p-2.5 text-center font-mono text-blue-300">Visual</td>
+                    <td class="p-2.5 text-[11px] leading-relaxed">
+                      Banda centrada sobre los tambores (> 25 mm de distancia de seguridad a los bordes de la estructura). Rodillos guía libres.
+                    </td>
+                    <td class="p-2.5 text-center">
+                      <select class="check-select bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs font-mono font-bold" onchange="actualizarCheckArranque()">
+                        <option value="OK" class="text-emerald-400">✓ Conforme (OK)</option>
+                        <option value="FALLA" class="text-rose-400">⚠️ No Conforme (Anomalía)</option>
+                      </select>
+                    </td>
+                    <td class="p-2.5 text-[11px] text-rose-300">
+                      <strong>Previene F4:</strong> Si la banda está desviada, ajustar tornillos de alineación del tambor antes de cargar.
+                    </td>
+                  </tr>
+
+                  <!-- Punto 6 -->
+                  <tr class="hover:bg-slate-900/40 transition">
+                    <td class="p-2.5 text-center font-mono font-bold text-slate-400">06</td>
+                    <td class="p-2.5">
+                      <strong class="text-white block font-sans">Presión de contacto y articulación en Rascador Primario</strong>
+                      <span class="text-[10px] text-slate-400 font-mono">SYS-EST · Estructura y Limpieza</span>
+                    </td>
+                    <td class="p-2.5 text-center font-mono text-amber-300">Visual / Táctil</td>
+                    <td class="p-2.5 text-[11px] leading-relaxed">
+                      Hoja de uretano apoyada uniformemente sobre la banda con resorte activo; eje basculante limpio sin barro solidificado.
+                    </td>
+                    <td class="p-2.5 text-center">
+                      <select class="check-select bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs font-mono font-bold" onchange="actualizarCheckArranque()">
+                        <option value="OK" class="text-emerald-400">✓ Conforme (OK)</option>
+                        <option value="FALLA" class="text-rose-400">⚠️ No Conforme (Anomalía)</option>
+                      </select>
+                    </td>
+                    <td class="p-2.5 text-[11px] text-rose-300">
+                      <strong>Previene F5:</strong> Lavar barro mineral y calibrar tensión de resorte si la cuchilla está trabada.
+                    </td>
+                  </tr>
+
+                  <!-- Punto 7 -->
+                  <tr class="hover:bg-slate-900/40 transition">
+                    <td class="p-2.5 text-center font-mono font-bold text-slate-400">07</td>
+                    <td class="p-2.5">
+                      <strong class="text-white block font-sans">Estado de Rascador Secundario de Carburo y Quitapiedras en V</strong>
+                      <span class="text-[10px] text-slate-400 font-mono">SYS-EST · Estructura y Limpieza</span>
+                    </td>
+                    <td class="p-2.5 text-center font-mono text-blue-300">Visual</td>
+                    <td class="p-2.5 text-[11px] leading-relaxed">
+                      Pastillas de carburo de tungsteno sin roturas ni desportilladuras; arado en V sin piedras atrapadas contra la banda.
+                    </td>
+                    <td class="p-2.5 text-center">
+                      <select class="check-select bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs font-mono font-bold" onchange="actualizarCheckArranque()">
+                        <option value="OK" class="text-emerald-400">✓ Conforme (OK)</option>
+                        <option value="FALLA" class="text-rose-400">⚠️ No Conforme (Anomalía)</option>
+                      </select>
+                    </td>
+                    <td class="p-2.5 text-[11px] text-slate-300">
+                      Despejar piedras atrapadas manualmente para evitar perforación longitudinal de la banda en el ramal inferior.
+                    </td>
+                  </tr>
+
+                  <!-- Punto 8 -->
+                  <tr class="hover:bg-slate-900/40 transition">
+                    <td class="p-2.5 text-center font-mono font-bold text-slate-400">08</td>
+                    <td class="p-2.5">
+                      <strong class="text-white block font-sans">Lazo de Parada de Emergencia y Sensores de Desalineación</strong>
+                      <span class="text-[10px] text-slate-400 font-mono">SYS-ELE · Control y Seguridad</span>
+                    </td>
+                    <td class="p-2.5 text-center font-mono text-emerald-300">Táctil / Funcional</td>
+                    <td class="p-2.5 text-[11px] leading-relaxed">
+                      Cables tiradores bilaterales debidamente tensados a lo largo de toda la pasarela; interruptores con traba rearmada y lazo OK.
+                    </td>
+                    <td class="p-2.5 text-center">
+                      <select class="check-select bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs font-mono font-bold" onchange="actualizarCheckArranque()">
+                        <option value="OK" class="text-emerald-400">✓ Conforme (OK)</option>
+                        <option value="FALLA" class="text-rose-400">⚠️ No Conforme (Anomalía)</option>
+                      </select>
+                    </td>
+                    <td class="p-2.5 text-[11px] text-rose-300">
+                      <strong>Bloqueo Mandatorio:</strong> Prohibido arrancar con tirador flojo o trabado. Verificar señal en panel SCADA.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- NOTA DE PROCEDIMIENTO INDUSTRIAL -->
+            <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 text-[11px] text-slate-400 flex items-start gap-2">
+              <span class="text-amber-400 text-base">⚠️</span>
+              <p class="leading-relaxed">
+                <strong>Protocolo de Bloqueo LOTO ante No Conformidad:</strong> Si cualquiera de los 8 ítems se marca como <em>No Conforme</em>, el operador debe aplicar de inmediato su candado de bloqueo físico y tarjeta roja en el disyuntor principal del CCM, registrar la anomalía en el CMMS/GMAO y notificar al supervisor de turno.
+              </p>
+            </div>
+          </div>
+
+          <!-- =============================================================== -->
+          <!-- SUB-VISTA 2: RUTA DE INSPECCIÓN INSTRUMENTAL (PREDICTIVO CBM) -->
+          <!-- =============================================================== -->
+          <div id="subvista-ruta" class="hidden space-y-6">
+            <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-1">
+              <span class="text-xs font-bold uppercase tracking-wider text-blue-400 block font-mono">
+                Ruta Estandarizada de Inspección Instrumental por Estaciones Físicas
+              </span>
+              <p class="text-[11px] text-slate-300">
+                Recorrido metrológico secuencial a cargo de especialistas de Mantenimiento Predictivo (CBM). Se aplican normas internacionales de severidad para evaluar la salud del activo en marcha.
+              </p>
+            </div>
+
+            <!-- LAS 5 ESTACIONES FÍSICAS DE LA RUTA -->
+            <div class="space-y-4">
+              
+              <!-- ESTACIÓN 1 -->
+              <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-3">
+                <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                  <div class="flex items-center gap-2">
+                    <span class="px-2 py-0.5 rounded bg-blue-900/60 text-blue-300 font-mono text-[10px] font-bold">Estación 1</span>
+                    <strong class="text-white text-xs">Unidad Motriz (Motor Asincrónico 55 kW + Reductor 3 etapas + Acoplamiento)</strong>
+                  </div>
+                  <span class="text-[10px] font-mono text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-800/40">Frecuencia: Quincenal / Mensual</span>
+                </div>
+                <div class="overflow-x-auto rounded-lg border border-slate-800">
+                  <table class="w-full text-left text-[11px]">
+                    <thead class="bg-slate-800/80 text-slate-300 font-mono text-[10px]">
+                      <tr>
+                        <th class="p-2">Técnica / Instrumento</th>
+                        <th class="p-2">Parámetro Medido & Coordenadas</th>
+                        <th class="p-2">Norma de Referencia</th>
+                        <th class="p-2">Umbrales de Severidad</th>
+                        <th class="p-2">Falla que Bloquea</th>
+                      </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-800 text-slate-300 font-sans">
+                      <tr>
+                        <td class="p-2 font-bold text-white">Vibrómetro Analizador FFT</td>
+                        <td class="p-2 font-mono text-xs">Velocidad RMS global [mm/s] (1H, 1V, 1A)</td>
+                        <td class="p-2 font-mono text-blue-300">ISO 10816-3 (Grupo 1)</td>
+                        <td class="p-2 font-mono">Normal: &lt; 2.8 | Alarma: 4.5 | Parada: &gt; 7.1</td>
+                        <td class="p-2 text-rose-300">Desalineación motor-reductor</td>
+                      </tr>
+                      <tr>
+                        <td class="p-2 font-bold text-white">Cámara Termográfica IR</td>
+                        <td class="p-2 font-mono text-xs">Temperatura en carcasa y aletas estatóricas</td>
+                        <td class="p-2 font-mono text-blue-300">IEC 60034-1 (Clase F)</td>
+                        <td class="p-2 font-mono">Normal: &lt; 75°C | Alarma: 85°C | Crítico: &gt; 95°C</td>
+                        <td class="p-2 text-rose-300 font-bold">Bloquea F2 (Quema motor 55 kW)</td>
+                      </tr>
+                      <tr>
+                        <td class="p-2 font-bold text-white">Pinza Amperimétrica True-RMS</td>
+                        <td class="p-2 font-mono text-xs">Corriente en 3 fases (L1, L2, L3) + Desbalance</td>
+                        <td class="p-2 font-mono text-blue-300">Placa Fabricante ($I_n=102\text{ A}$)</td>
+                        <td class="p-2 font-mono">Nominal: 90-100 A | Desbalance &lt; 5% | Sobrecorriente &gt; 110 A</td>
+                        <td class="p-2 text-rose-300">Sobrecarga mecánica de reductor</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- ESTACIÓN 2 -->
+              <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-3">
+                <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                  <div class="flex items-center gap-2">
+                    <span class="px-2 py-0.5 rounded bg-blue-900/60 text-blue-300 font-mono text-[10px] font-bold">Estación 2</span>
+                    <strong class="text-white text-xs">Tambor Motriz Ø500 y Chute (Soportes SNH 520 + Rodamientos SKF 22220 EK)</strong>
+                  </div>
+                  <span class="text-[10px] font-mono text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-800/40">Frecuencia: Quincenal</span>
+                </div>
+                <div class="overflow-x-auto rounded-lg border border-slate-800">
+                  <table class="w-full text-left text-[11px]">
+                    <thead class="bg-slate-800/80 text-slate-300 font-mono text-[10px]">
+                      <tr>
+                        <th class="p-2">Técnica / Instrumento</th>
+                        <th class="p-2">Parámetro Medido & Coordenadas</th>
+                        <th class="p-2">Norma de Referencia</th>
+                        <th class="p-2">Umbrales de Severidad</th>
+                        <th class="p-2">Falla que Bloquea</th>
+                      </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-800 text-slate-300 font-sans">
+                      <tr>
+                        <td class="p-2 font-bold text-white">Aceleración con Envolvente (gE)</td>
+                        <td class="p-2 font-mono text-xs">Frecuencia de pista exterior (BPFO = 118 Hz)</td>
+                        <td class="p-2 font-mono text-blue-300">ISO 20816-3 / Catálogo SKF</td>
+                        <td class="p-2 font-mono">Normal: &lt; 0.5 gE | Alerta: 1.5 gE | Peligro: &gt; 3.0 gE</td>
+                        <td class="p-2 text-rose-300 font-bold">Bloquea F1 (Spalling SKF 22220 EK)</td>
+                      </tr>
+                      <tr>
+                        <td class="p-2 font-bold text-white">Ultrasonido Acústico (20-40 kHz)</td>
+                        <td class="p-2 font-mono text-xs">Fricción por lubricación deficiente / contaminación</td>
+                        <td class="p-2 font-mono text-blue-300">Línea de base dBµV</td>
+                        <td class="p-2 font-mono">Normal: Base + 4 dB | Engrasar: Base + 8 dB | Daño: +16 dB</td>
+                        <td class="p-2 text-rose-300 font-bold">Bloquea F1 (Sobreengrase y polvo cuarzo)</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- ESTACIÓN 3 -->
+              <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-3">
+                <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                  <div class="flex items-center gap-2">
+                    <span class="px-2 py-0.5 rounded bg-blue-900/60 text-blue-300 font-mono text-[10px] font-bold">Estación 3</span>
+                    <strong class="text-white text-xs">Ramal Portante y Retorno (Banda EP 630/4 + Rodillos Ø108 en Artesa 35°)</strong>
+                  </div>
+                  <span class="text-[10px] font-mono text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-800/40">Frecuencia: Mensual</span>
+                </div>
+                <div class="overflow-x-auto rounded-lg border border-slate-800">
+                  <table class="w-full text-left text-[11px]">
+                    <thead class="bg-slate-800/80 text-slate-300 font-mono text-[10px]">
+                      <tr>
+                        <th class="p-2">Técnica / Instrumento</th>
+                        <th class="p-2">Parámetro Medido & Coordenadas</th>
+                        <th class="p-2">Norma de Referencia</th>
+                        <th class="p-2">Umbrales de Severidad</th>
+                        <th class="p-2">Falla que Bloquea</th>
+                      </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-800 text-slate-300 font-sans">
+                      <tr>
+                        <td class="p-2 font-bold text-white">Medidor Ultrasónico de Espesor</td>
+                        <td class="p-2 font-mono text-xs">Espesor de cubierta superior de caucho DIN X</td>
+                        <td class="p-2 font-mono text-blue-300">Norma DIN 22102</td>
+                        <td class="p-2 font-mono">Nuevo: 5.0 mm | Alerta: 2.5 mm | Límite descarte: &lt; 1.5 mm</td>
+                        <td class="p-2 text-rose-300 font-bold">Bloquea F4 (Desgaste y rotura de banda)</td>
+                      </tr>
+                      <tr>
+                        <td class="p-2 font-bold text-white">Termografía Infrarroja en Rodillos</td>
+                        <td class="p-2 font-mono text-xs">Calentamiento en rodamientos 6204-2RS de rodillos</td>
+                        <td class="p-2 font-mono text-blue-300">ISO 18434-1</td>
+                        <td class="p-2 font-mono">Normal: &lt; 55°C | Alarma rodillo trabado: &gt; 75°C</td>
+                        <td class="p-2 text-rose-300">Fricción por rodillos bloqueados</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- ESTACIÓN 4 -->
+              <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-3">
+                <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                  <div class="flex items-center gap-2">
+                    <span class="px-2 py-0.5 rounded bg-blue-900/60 text-blue-300 font-mono text-[10px] font-bold">Estación 4</span>
+                    <strong class="text-white text-xs">Estación de Cola y Tensor Oleohidráulico (Tambor Ø400 + Cilindro y Centralita 20 bar)</strong>
+                  </div>
+                  <span class="text-[10px] font-mono text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-800/40">Frecuencia: Quincenal / Trimestral</span>
+                </div>
+                <div class="overflow-x-auto rounded-lg border border-slate-800">
+                  <table class="w-full text-left text-[11px]">
+                    <thead class="bg-slate-800/80 text-slate-300 font-mono text-[10px]">
+                      <tr>
+                        <th class="p-2">Técnica / Instrumento</th>
+                        <th class="p-2">Parámetro Medido & Coordenadas</th>
+                        <th class="p-2">Norma de Referencia</th>
+                        <th class="p-2">Umbrales de Severidad</th>
+                        <th class="p-2">Falla que Bloquea</th>
+                      </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-800 text-slate-300 font-sans">
+                      <tr>
+                        <td class="p-2 font-bold text-white">Manómetro de glicerina (Minimess)</td>
+                        <td class="p-2 font-mono text-xs">Presión de circuito de tensado y disparo</td>
+                        <td class="p-2 font-mono text-blue-300">Plano Hidráulico</td>
+                        <td class="p-2 font-mono">Nominal: 20 bar (±1) | Disparo presostato: 15 bar</td>
+                        <td class="p-2 text-rose-300 font-bold">Bloquea F3 (Pérdida de tensión y parada)</td>
+                      </tr>
+                      <tr>
+                        <td class="p-2 font-bold text-white">Análisis de Aceite en Laboratorio</td>
+                        <td class="p-2 font-mono text-xs">Conteo partículas ISO 4406 y Karl Fischer</td>
+                        <td class="p-2 font-mono text-blue-300">Norma ISO 4406</td>
+                        <td class="p-2 font-mono">Código Objetivo: 18/16/13 | Agua: &lt; 300 ppm</td>
+                        <td class="p-2 text-rose-300">Desgaste prematuro de bomba y cilindro</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- ESTACIÓN 5 -->
+              <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-3">
+                <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                  <div class="flex items-center gap-2">
+                    <span class="px-2 py-0.5 rounded bg-blue-900/60 text-blue-300 font-mono text-[10px] font-bold">Estación 5</span>
+                    <strong class="text-white text-xs">Tablero de Potencia CCM y Sensores de Campo</strong>
+                  </div>
+                  <span class="text-[10px] font-mono text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-800/40">Frecuencia: Mensual</span>
+                </div>
+                <div class="overflow-x-auto rounded-lg border border-slate-800">
+                  <table class="w-full text-left text-[11px]">
+                    <thead class="bg-slate-800/80 text-slate-300 font-mono text-[10px]">
+                      <tr>
+                        <th class="p-2">Técnica / Instrumento</th>
+                        <th class="p-2">Parámetro Medido & Coordenadas</th>
+                        <th class="p-2">Norma de Referencia</th>
+                        <th class="p-2">Umbrales de Severidad</th>
+                        <th class="p-2">Falla que Bloquea</th>
+                      </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-800 text-slate-300 font-sans">
+                      <tr>
+                        <td class="p-2 font-bold text-white">Termografía en Borneras CCM</td>
+                        <td class="p-2 font-mono text-xs">Temperatura en bornes de arrancador suave y contactores</td>
+                        <td class="p-2 font-mono text-blue-300">NFPA 70B / IEC 60947</td>
+                        <td class="p-2 font-mono">ΔT fases &lt; 5°C normal | &gt; 15°C punto caliente crítico</td>
+                        <td class="p-2 text-rose-300">Cortocircuito en bornes de alimentación</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- =============================================================== -->
+          <!-- SUB-VISTA 3: ESTÁNDAR DE ÓRDENES DE TRABAJO (GMAO / CMMS) -->
+          <!-- =============================================================== -->
+          <div id="subvista-ot" class="hidden space-y-6">
+            
+            <!-- REQUISITOS NORMATIVOS DE LA OT -->
+            <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-2">
+              <span class="text-xs font-bold uppercase tracking-wider text-blue-400 block font-mono">
+                Estándar Técnico para Emisión de Órdenes de Trabajo Preventivas Instrumentales
+              </span>
+              <p class="text-[11px] text-slate-300 leading-relaxed">
+                Toda OT emitida bajo sistemas GMAO/CMMS (SAP PM, IBM Maximo, Fracttal) para inspección instrumental predictiva debe satisfacer obligatoriamente los siguientes 6 requisitos normativos:
+              </p>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2 text-[11px]">
+                <div class="p-3 rounded-lg bg-slate-900 border border-slate-800 space-y-1">
+                  <span class="font-bold text-white block">1. Taxonomía & Trazabilidad</span>
+                  <p class="text-slate-400">Tag unívoco según ISO 14224 (MIN-ARG-CV01-SYS-MOT), centro de costos, criticidad y clase de OT (PM02 Preventiva Instrumental).</p>
+                </div>
+                <div class="p-3 rounded-lg bg-slate-900 border border-slate-800 space-y-1">
+                  <span class="font-bold text-rose-400 block">2. Seguridad LOTO & EPP</span>
+                  <p class="text-slate-400">Permiso de trabajo seguro (PTS), protocolo de bloqueo de energía cero si se intervienen piezas móviles y EPP dieléctrico/auditivo.</p>
+                </div>
+                <div class="p-3 rounded-lg bg-slate-900 border border-slate-800 space-y-1">
+                  <span class="font-bold text-amber-400 block">3. Metrología & Calibración</span>
+                  <p class="text-slate-400">Certificados de calibración vigentes bajo ISO 17025 para acelerómetros, pirómetros (ajuste $\varepsilon=0.95$) y pinzas True-RMS.</p>
+                </div>
+                <div class="p-3 rounded-lg bg-slate-900 border border-slate-800 space-y-1">
+                  <span class="font-bold text-blue-400 block">4. Coordenadas de Medición</span>
+                  <p class="text-slate-400">Puntos normalizados (1H, 1V, 1A en motor lado acople; 2H, 2V en motor lado libre; 3H, 3V, 3A en reductor; 4H, 4V en salida; 5H, 5V en tambor).</p>
+                </div>
+                <div class="p-3 rounded-lg bg-slate-900 border border-slate-800 space-y-1">
+                  <span class="font-bold text-emerald-400 block">5. Criterios de Aceptación</span>
+                  <p class="text-slate-400">Semáforo de tres zonas: Verde (Normal), Amarillo (Alerta preventiva, reprogramar en 15 días) y Rojo (Peligro crítico, parada en 24-48 h).</p>
+                </div>
+                <div class="p-3 rounded-lg bg-slate-900 border border-slate-800 space-y-1">
+                  <span class="font-bold text-purple-400 block">6. Cierre Técnico & Feedback</span>
+                  <p class="text-slate-400">Carga de valores en base de tendencias, firma de analista Nivel II (ISO 18436-2) y disparo automático de OT correctiva si hay alarma.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- MODELO OFICIAL RENDERIZADO DE UNA ORDEN DE TRABAJO (IMPRIMIBLE) -->
+            <div class="p-6 rounded-2xl bg-slate-950 border border-blue-900/60 space-y-4 font-sans text-xs">
+              <div class="flex flex-wrap items-center justify-between border-b border-slate-800 pb-3">
+                <div class="space-y-0.5">
+                  <span class="text-[10px] text-blue-400 font-mono font-bold block">SISTEMA DE GESTIÓN DE MANTENIMIENTO · CMMS / GMAO</span>
+                  <h3 class="text-base font-bold text-white tracking-wide">ORDEN DE TRABAJO PREVENTIVA INSTRUMENTAL: OT-2026-0842</h3>
+                  <span class="text-[11px] text-slate-400">Clase: PM02 (Monitoreo de Condición CBM) · Criticidad: <strong>Clase A</strong></span>
+                </div>
+                <div class="text-right font-mono text-[11px] text-slate-400">
+                  Fecha Emisión: <strong class="text-white">2026-09-15</strong><br>
+                  Estado: <span class="text-emerald-400 font-bold">EJECUTADA & VALIDADA</span>
+                </div>
+              </div>
+
+              <!-- DATOS DE EMPLAZAMIENTO -->
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-900 p-3 rounded-xl border border-slate-800 font-mono text-[11px]">
+                <div><span class="text-slate-500 block text-[10px]">ACTIVO JERÁRQUICO:</span><strong>MIN-ARG-CV01-SYS-MOT</strong></div>
+                <div><span class="text-slate-500 block text-[10px]">EQUIPO:</span><strong>Cinta Transportadora CV-01</strong></div>
+                <div><span class="text-slate-500 block text-[10px]">SUBSISTEMA:</span><strong>Unidad Motriz 55 kW</strong></div>
+                <div><span class="text-slate-500 block text-[10px]">ESPECIALIDAD:</span><strong>Análisis Vibracional & Termografía</strong></div>
+              </div>
+
+              <!-- INSTRUCCIONES ESPECÍFICAS DE TRABAJO -->
+              <div class="space-y-1.5 text-[11px] text-slate-300">
+                <strong class="text-white block font-mono text-xs uppercase">Procedimiento Operativo Estandarizado:</strong>
+                <p class="leading-relaxed">
+                  1. Verificar que el transportador CV-01 opere en régimen estable con carga nominal (> 80% capacidad).<br>
+                  2. Colocar sensor acelerómetro magnético en los puntos unívocos marcados con pintura epoxy amarilla (1H, 1V, 1A, 2H, 2V).<br>
+                  3. Registrar espectro FFT en rango 10–1000 Hz (velocidad RMS) y demodulación de envolvente gE en rango 5–20 kHz (frecuencias de rodamientos BPFO/BPFI).<br>
+                  4. Efectuar barrido termográfico con cámara IR sobre borneras de motor y cuerpo de reductor, ajustando emisividad a \(\varepsilon = 0.95\).
+                </p>
+              </div>
+
+              <!-- REGISTRO DE MEDICIONES EN LA OT -->
+              <div class="overflow-x-auto rounded-lg border border-slate-800">
+                <table class="w-full text-left text-[11px] font-mono">
+                  <thead class="bg-slate-800 text-slate-200">
+                    <tr>
+                      <th class="p-2">Punto Normalizado</th>
+                      <th class="p-2">Parámetro</th>
+                      <th class="p-2 text-right">Valor Medido</th>
+                      <th class="p-2 text-right">Límite Alerta</th>
+                      <th class="p-2 text-center">Severidad</th>
+                      <th class="p-2">Diagnóstico del Especialista</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-800 text-slate-300">
+                    <tr>
+                      <td class="p-2 text-white font-bold">1H (Motor LA - Horizontal)</td>
+                      <td class="p-2 font-sans">Velocidad RMS</td>
+                      <td class="p-2 text-right text-emerald-400 font-bold">1.82 mm/s</td>
+                      <td class="p-2 text-right text-slate-400">4.50 mm/s</td>
+                      <td class="p-2 text-center"><span class="px-1.5 py-0.5 rounded bg-emerald-900 text-emerald-300 text-[10px]">NORMAL</span></td>
+                      <td class="p-2 font-sans text-slate-400">Amplitud 1X baja. Alineación con reductor admisible.</td>
+                    </tr>
+                    <tr>
+                      <td class="p-2 text-white font-bold">1A (Motor LA - Axial)</td>
+                      <td class="p-2 font-sans">Velocidad RMS</td>
+                      <td class="p-2 text-right text-emerald-400 font-bold">1.15 mm/s</td>
+                      <td class="p-2 text-right text-slate-400">4.50 mm/s</td>
+                      <td class="p-2 text-center"><span class="px-1.5 py-0.5 rounded bg-emerald-900 text-emerald-300 text-[10px]">NORMAL</span></td>
+                      <td class="p-2 font-sans text-slate-400">Sin empuje axial anómalo.</td>
+                    </tr>
+                    <tr>
+                      <td class="p-2 text-white font-bold">5H (Tambor Motriz SKF 22220)</td>
+                      <td class="p-2 font-sans">Envolvente gE</td>
+                      <td class="p-2 text-right text-emerald-400 font-bold">0.42 gE</td>
+                      <td class="p-2 text-right text-slate-400">1.50 gE</td>
+                      <td class="p-2 text-center"><span class="px-1.5 py-0.5 rounded bg-emerald-900 text-emerald-300 text-[10px]">NORMAL</span></td>
+                      <td class="p-2 font-sans text-slate-400">Sin picos en BPFO (118 Hz). Película lubricante íntegra.</td>
+                    </tr>
+                    <tr>
+                      <td class="p-2 text-white font-bold">Bornera Motor 55 kW</td>
+                      <td class="p-2 font-sans">Termografía ΔT</td>
+                      <td class="p-2 text-right text-emerald-400 font-bold">ΔT = 2.1°C</td>
+                      <td class="p-2 text-right text-slate-400">ΔT &gt; 5.0°C</td>
+                      <td class="p-2 text-center"><span class="px-1.5 py-0.5 rounded bg-emerald-900 text-emerald-300 text-[10px]">NORMAL</span></td>
+                      <td class="p-2 font-sans text-slate-400">Conexiones equilibradas en bornes U1, V1, W1.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- CIERRE TÉCNICO Y FIRMAS -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-slate-800 text-[11px]">
+                <div class="p-3 bg-slate-900 rounded-lg border border-slate-800 space-y-1">
+                  <span class="font-bold text-white block">Dictamen de Confiabilidad:</span>
+                  <p class="text-slate-300">
+                    El activo se encuentra en <strong>Zona A (Condición Óptima de Operación)</strong> bajo norma ISO 10816-3. No se requiere intervención correctiva ni ajuste de frecuencias. Próxima inspección programada en 15 días calendario.
+                  </p>
+                </div>
+                <div class="p-3 bg-slate-900 rounded-lg border border-slate-800 flex flex-col justify-between">
+                  <div class="flex justify-between items-center text-slate-400">
+                    <span>Inspector Predictivo: <strong>Ing. Especialista Nivel II</strong></span>
+                    <span>Registro: <strong>ISO 18436-2</strong></span>
+                  </div>
+                  <div class="pt-3 flex justify-between items-end border-t border-slate-800/80 text-[10px] text-slate-500">
+                    <span>Firma / Sello de Conformidad</span>
+                    <span class="font-mono text-emerald-400 font-bold">CIERRE TÉCNICO APROBADO</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      <!-- =================================================================== -->
+      <!-- PESTAÑA 3: REGISTRO DE FALLAS Y KPIS (CON SIMULADOR STANDBY) -->
       <!-- =================================================================== -->
       <section id="tab-kpis" class="tab-content hidden space-y-6">
         <div class="theme-card border rounded-2xl p-6 shadow-sm card-print">
@@ -1656,12 +2330,13 @@
 
               <!-- 1.a TAXONOMÍA -->
               <div class="space-y-2">
-                <span class="font-bold text-blue-400 block text-xs">a) Taxonomía de Activos a 6 Niveles y Homologación ISO 14224:</span>
+                <span class="font-bold text-blue-400 block text-xs">a) Taxonomía de Activos según ISO 14224 (Niveles 1 a 8) y Homologación Académica:</span>
                 <p class="text-slate-300 leading-relaxed">
-                  Para asegurar la imputación inequívoca de costos, órdenes de trabajo y modos de falla en el sistema CMMS/GMAO, se estructura el activo electromecánico en una jerarquía unívoca de 6 niveles operativos:
+                  Para asegurar la imputación inequívoca de costos, órdenes de trabajo y modos de falla en el sistema CMMS/GMAO, se estructura el activo electromecánico en una jerarquía unívoca de 8 niveles según la norma internacional ISO 14224:
                 </p>
                 <div class="p-3 bg-slate-950 rounded-lg border border-slate-800 font-mono text-[11px] space-y-1.5 text-slate-300">
-                  <div>• <strong>Nivel 2 (Instalación):</strong> Planta de Clasificación y Procesamiento de Áridos de Alta Densidad (7,200 h/año en régimen continuo).</div>
+                  <div>• <strong>Nivel 1 (Industria / Rubro):</strong> Industria Minera y Procesamiento de Minerales (Extracción y Tratamiento de Áridos Industriales).</div>
+                  <div>• <strong>Nivel 2 (Instalación / Categoría de Negocio):</strong> Planta de Clasificación y Procesamiento de Áridos de Alta Densidad (7,200 h/año en régimen continuo).</div>
                   <div>• <strong>Nivel 3 (Sección / Área):</strong> Área Operativa de Elevación Continua, Acopio y Molienda Primaria.</div>
                   <div>• <strong>Nivel 4 (Unidad de Equipo):</strong> Cinta Transportadora Principal de Alimentación a Reactor (TAG: CV-01).</div>
                   <div>• <strong>Nivel 5 (Subunidad / Subsistema):</strong> SYS-MOT (Motriz), SYS-BAN (Banda y Rodillos), SYS-TEN (Tensión Oleohidráulica), SYS-EST (Estructura y Limpieza), SYS-ELE (Control y Seguridad).</div>
@@ -1784,13 +2459,165 @@
               </div>
             </div>
 
-            <!-- CONSIGNA 2 -->
-            <div class="space-y-2">
-              <h4 class="font-bold text-white text-xs">Consigna 2: Ruta de Inspección Rutinaria (Sensorial vs. Instrumental)</h4>
-              <p>
-                • <strong>Inspecciones Sensoriales (Operador / TPM en marcha):</strong> Control visual de filos y holguras en rascadores de uretano (diario por turno); inspección auditiva y visual de tambores de reenvío para evitar apelmazamiento de mineral (diario); y verificación de estanqueidad en racores hidráulicos y nivel de aceite (diario).<br>
-                • <strong>Inspecciones Instrumentales (Mantenimiento / Predictivo):</strong> Medición de aceleración RMS y envolvente en rodamientos SKF 22220 EK con vibrómetro portátil y ultrasonido (quincenal); termografía infrarroja en carcasa de motor 55 kW y borneras (mensual); y análisis de aceite sintético ISO VG 220 en laboratorio especializado (trimestral).
-              </p>
+            <!-- CONSIGNA 2: RUTA DE INSPECCIÓN, CHECK DE ARRANQUE Y ESTÁNDAR DE OTS -->
+            <div class="space-y-4 p-4 rounded-xl bg-slate-900/60 border border-slate-800">
+              <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                <h4 class="font-bold text-white text-xs flex items-center gap-2">
+                  <span class="px-2 py-0.5 rounded bg-blue-900/60 text-blue-300 font-mono text-[11px]">Consigna 2</span>
+                  Plan de Tareas de Inspección Rutinaria (Sensorial TPM vs. Instrumental CBM), Check de Pre-Arranque y Estándares de OTs
+                </h4>
+                <span class="text-[10px] font-mono text-slate-400">Puntaje Base: 100% Auditado</span>
+              </div>
+
+              <!-- 2.a FUNDAMENTACIÓN -->
+              <div class="space-y-2">
+                <span class="font-bold text-blue-400 block text-xs">a) Dicotomía Operacional: Control Sensorial (TPM) vs. Medición Instrumental (CBM):</span>
+                <p class="text-slate-300 leading-relaxed">
+                  Para maximizar la confiabilidad operacional de la cinta transportadora CV-01 sin incurrir en sobrecostos metrológicos, la estrategia de inspección se estructura en dos líneas de defensa complementarias:
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-[11px]">
+                  <div class="p-3 bg-slate-950 rounded-lg border border-slate-800 space-y-1">
+                    <strong class="text-emerald-300 block font-mono text-xs">1. Inspección Sensorial (Operador / TPM - Rutina CIL):</strong>
+                    <p class="text-slate-400 leading-relaxed">
+                      Ejecutada en cada inicio de turno por el operador de planta mediante sus sentidos (vista, oído, tacto con guante, olfato). Su objetivo es detectar desviaciones macroscópicas inmediatas (polvo compactado, fugas, barro acumulado, desalineación). Duración: 5 minutos.
+                    </p>
+                  </div>
+                  <div class="p-3 bg-slate-950 rounded-lg border border-slate-800 space-y-1">
+                    <strong class="text-blue-300 block font-mono text-xs">2. Inspección Instrumental (Mantenimiento / Predictivo CBM):</strong>
+                    <p class="text-slate-400 leading-relaxed">
+                      Ejecutada quincenal, mensual o trimestralmente por inspectores certificados utilizando instrumentos portátiles calibrados (analizador FFT, ultrasonido acústico, cámara termográfica, pinza True-RMS, manómetro minimess). Su objetivo es medir tendencias cuantitativas antes de la manifestación de síntomas audibles o visibles.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 2.b CHECK DE ARRANQUE -->
+              <div class="space-y-2 pt-2 border-t border-slate-800">
+                <span class="font-bold text-blue-400 block text-xs">b) Planilla Estandarizada de Pre-Arranque (Checklist Diario de Turno):</span>
+                <p class="text-slate-300 leading-relaxed">
+                  Antes de energizar el disyuntor principal de la cinta transportadora, el operador debe constatar el cumplimiento mandatorio de 8 puntos de control sensorial bajo estándar CIL:
+                </p>
+                <div class="overflow-x-auto rounded border border-slate-800 text-[10px] font-mono">
+                  <table class="w-full text-left">
+                    <thead class="bg-slate-800/80 text-slate-300">
+                      <tr>
+                        <th class="p-1.5 text-center w-8">N°</th>
+                        <th class="p-1.5">Punto de Inspección</th>
+                        <th class="p-1.5 text-center">Método</th>
+                        <th class="p-1.5">Condición Aceptable</th>
+                        <th class="p-1.5">Falla que Bloquea / Acción Correctiva</th>
+                      </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-800/60 text-slate-300">
+                      <tr>
+                        <td class="p-1.5 text-center font-bold">01</td>
+                        <td class="p-1.5 font-sans font-semibold text-white">Rejilla de ventilador Motor 55 kW</td>
+                        <td class="p-1.5 text-center text-blue-300">Visual</td>
+                        <td class="p-1.5 font-sans">Ranuras limpias sin costra de polvo mineral adherido.</td>
+                        <td class="p-1.5 font-sans text-rose-300"><strong>Bloquea F2:</strong> Soplado de aire comprimido si hay obstrucción.</td>
+                      </tr>
+                      <tr>
+                        <td class="p-1.5 text-center font-bold">02</td>
+                        <td class="p-1.5 font-sans font-semibold text-white">Nivel de aceite en Reductor 3 etapas</td>
+                        <td class="p-1.5 text-center text-blue-300">Visual</td>
+                        <td class="p-1.5 font-sans">Nivel centrado en mirilla; color ámbar translúcido.</td>
+                        <td class="p-1.5 font-sans">Aviso a lubricación si el nivel está bajo o con espuma.</td>
+                      </tr>
+                      <tr>
+                        <td class="p-1.5 text-center font-bold">03</td>
+                        <td class="p-1.5 font-sans font-semibold text-white">Presión y estanqueidad Central Hidráulica</td>
+                        <td class="p-1.5 text-center text-blue-300">Visual</td>
+                        <td class="p-1.5 font-sans">Manómetro en 20 bar (±1 bar); sin exudación en manguera.</td>
+                        <td class="p-1.5 font-sans text-rose-300"><strong>Bloquea F3:</strong> Bloqueo si hay fuga o presión &lt; 15 bar.</td>
+                      </tr>
+                      <tr>
+                        <td class="p-1.5 text-center font-bold">04</td>
+                        <td class="p-1.5 font-sans font-semibold text-white">Tambor de Cola Autolimpiante Ø400</td>
+                        <td class="p-1.5 text-center text-blue-300">Visual</td>
+                        <td class="p-1.5 font-sans">Espirales y cono interior sin terrones de áridos pegados.</td>
+                        <td class="p-1.5 font-sans text-rose-300"><strong>Bloquea F4:</strong> Despeje manual de finos apelmazados.</td>
+                      </tr>
+                      <tr>
+                        <td class="p-1.5 text-center font-bold">05</td>
+                        <td class="p-1.5 font-sans font-semibold text-white">Centrado dinámico de banda</td>
+                        <td class="p-1.5 text-center text-blue-300">Visual</td>
+                        <td class="p-1.5 font-sans">Banda centrada a &gt; 25 mm de los bordes del chasis.</td>
+                        <td class="p-1.5 font-sans text-rose-300"><strong>Bloquea F4:</strong> Regulación de rodillos autocentradores.</td>
+                      </tr>
+                      <tr>
+                        <td class="p-1.5 text-center font-bold">06</td>
+                        <td class="p-1.5 font-sans font-semibold text-white">Rascador primario de uretano</td>
+                        <td class="p-1.5 text-center text-amber-300">Visual / Táctil</td>
+                        <td class="p-1.5 font-sans">Hoja en contacto uniforme; resorte sin barro mineral.</td>
+                        <td class="p-1.5 font-sans text-rose-300"><strong>Bloquea F5:</strong> Lavado de articulación y ajuste de torsión.</td>
+                      </tr>
+                      <tr>
+                        <td class="p-1.5 text-center font-bold">07</td>
+                        <td class="p-1.5 font-sans font-semibold text-white">Rascador secundario y quitapiedras en V</td>
+                        <td class="p-1.5 text-center text-blue-300">Visual</td>
+                        <td class="p-1.5 font-sans">Pastillas de carburo enteras; sin piedras acuñadas en V.</td>
+                        <td class="p-1.5 font-sans">Retiro de piedras atrapadas para evitar corte longitudinal.</td>
+                      </tr>
+                      <tr>
+                        <td class="p-1.5 text-center font-bold">08</td>
+                        <td class="p-1.5 font-sans font-semibold text-white">Cables tiradores de emergencia</td>
+                        <td class="p-1.5 text-center text-emerald-300">Táctil / SCADA</td>
+                        <td class="p-1.5 font-sans">Cables tensos con traba rearmada; lazo cerrado en SCADA.</td>
+                        <td class="p-1.5 font-sans text-rose-300"><strong>Bloqueo Mandatorio:</strong> No arrancar si el lazo está abierto.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- 2.c RUTA INSTRUMENTAL -->
+              <div class="space-y-2 pt-2 border-t border-slate-800">
+                <span class="font-bold text-blue-400 block text-xs">c) Ruta de Inspección Instrumental por 5 Estaciones Físicas:</span>
+                <p class="text-slate-300 leading-relaxed">
+                  Las mediciones predictivas se ejecutan siguiendo un itinerario físico secuencial estandarizado:
+                </p>
+                <div class="p-3 bg-slate-950 rounded-lg border border-slate-800 font-mono text-[11px] space-y-1.5 text-slate-300">
+                  <div>• <strong>Estación 1 (Unidad Motriz):</strong> Vibración global RMS en motor y reductor (ISO 10816-3 Grupo 1: &lt; 2.8 mm/s normal, &gt; 4.5 mm/s alarma); Termografía en carcasa (IEC 60034-1 clase F: &lt; 75°C normal, &gt; 85°C alarma); Pinza True-RMS en 3 fases (\(I_n \approx 102\text{ A}\), desbalance &lt; 5%). <em>Previene F2 y fallas en engranajes.</em></div>
+                  <div>• <strong>Estación 2 (Tambor Motriz Ø500 y Chute):</strong> Demodulación de envolvente gE en rodamientos SKF 22220 EK (BPFO = 118 Hz; &lt; 0.5 gE normal, &gt; 1.5 gE alerta); Ultrasonido pasivo 20–40 kHz para monitorear lubricación en tiempo real; Temperatura en soportes SNH (&lt; 65°C). <em>Previene F1.</em></div>
+                  <div>• <strong>Estación 3 (Ramal Portante y Retorno):</strong> Termografía infrarroja en rodamientos de rodillos (&lt; 55°C); Medición ultrasónica de espesor de banda (DIN 22102: nominal 5 mm, límite de descarte &lt; 1.5 mm). <em>Previene F4.</em></div>
+                  <div>• <strong>Estación 4 (Tambor de Cola y Carro Tensor):</strong> Presión en toma minimess de centralita (20 bar ± 1 bar); Verificación de disparo presostático (15 bar); Conteo de partículas en laboratorio según ISO 4406 (código 18/16/13) y Karl Fischer (&lt; 300 ppm). <em>Previene F3.</em></div>
+                  <div>• <strong>Estación 5 (Tablero CCM y Sensores):</strong> Termografía infrarroja en borneras de arrancador suave y contactores (NFPA 70B: \(\Delta T < 5^\circ\text{C}\) normal, \(\Delta T > 15^\circ\text{C}\) alarma crítica). <em>Previene disparos intempestivos.</em></div>
+                </div>
+              </div>
+
+              <!-- 2.d ESTÁNDARES DE OT -->
+              <div class="space-y-2 pt-2 border-t border-slate-800">
+                <span class="font-bold text-blue-400 block text-xs">d) Estándares de Emisión para Órdenes de Trabajo (OT) Preventivas Instrumentales:</span>
+                <p class="text-slate-300 leading-relaxed">
+                  Para que una OT de monitoreo de condición emitida en GMAO/CMMS (SAP PM clase PM02) sea jurídicamente válida y técnicamente reproducible, debe cumplir con 6 directrices normativas:
+                </p>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-[11px] font-mono">
+                  <div class="p-2.5 bg-slate-950 rounded border border-slate-800">
+                    <strong class="text-white block">1. Taxonomía ISO 14224</strong>
+                    <span class="text-slate-400 font-sans">Tag unívoco (MIN-ARG-CV01-SYS-MOT), criticidad Clase A y centro de costos.</span>
+                  </div>
+                  <div class="p-2.5 bg-slate-950 rounded border border-slate-800">
+                    <strong class="text-rose-400 block">2. Seguridad LOTO / PTS</strong>
+                    <span class="text-slate-400 font-sans">Permiso de trabajo seguro, candado de consignación y EPP dieléctrico/auditivo.</span>
+                  </div>
+                  <div class="p-2.5 bg-slate-950 rounded border border-slate-800">
+                    <strong class="text-amber-400 block">3. Calibración ISO 17025</strong>
+                    <span class="text-slate-400 font-sans">Instrumental con certificado de calibración vigente; ajuste \(\varepsilon = 0.95\) en IR.</span>
+                  </div>
+                  <div class="p-2.5 bg-slate-950 rounded border border-slate-800">
+                    <strong class="text-blue-400 block">4. Coordenadas Normalizadas</strong>
+                    <span class="text-slate-400 font-sans">Puntos identificados unívocamente: 1H, 1V, 1A (motor LA); 2H, 2V; 5H (tambor motriz).</span>
+                  </div>
+                  <div class="p-2.5 bg-slate-950 rounded border border-slate-800">
+                    <strong class="text-emerald-400 block">5. Semáforo de Severidad</strong>
+                    <span class="text-slate-400 font-sans">Verde (Admisible), Amarillo (Alerta a 15 días) y Rojo (Peligro crítico, parada en 24-48 h).</span>
+                  </div>
+                  <div class="p-2.5 bg-slate-950 rounded border border-slate-800">
+                    <strong class="text-purple-400 block">6. Cierre & Feedback</strong>
+                    <span class="text-slate-400 font-sans">Carga de espectros en base de datos de tendencias y firma de inspector Nivel II (ISO 18436-2).</span>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <!-- CONSIGNA 3: TABLA 3 OFICIAL -->
@@ -2666,6 +3493,95 @@
           }
         }
       });
+    }
+
+    // ===================================================================
+    // 7. CONTROL DE PLANILLA DE INSPECCIÓN & CHECK DE ARRANQUE (TPM & OTs)
+    // ===================================================================
+    function setSubvistaInspeccion(vista) {
+      document.getElementById("subvista-check").classList.add("hidden");
+      document.getElementById("subvista-ruta").classList.add("hidden");
+      document.getElementById("subvista-ot").classList.add("hidden");
+
+      const btnCheck = document.getElementById("btn-sub-check");
+      const btnRuta = document.getElementById("btn-sub-ruta");
+      const btnOt = document.getElementById("btn-sub-ot");
+
+      const inact = "px-3 py-1.5 rounded-lg text-slate-400 hover:text-white font-medium transition flex items-center gap-1";
+      const act = "px-3 py-1.5 rounded-lg bg-blue-600 text-white font-medium transition flex items-center gap-1";
+
+      btnCheck.className = inact;
+      btnRuta.className = inact;
+      btnOt.className = inact;
+
+      if (vista === 'check') {
+        document.getElementById("subvista-check").classList.remove("hidden");
+        btnCheck.className = act;
+      } else if (vista === 'ruta') {
+        document.getElementById("subvista-ruta").classList.remove("hidden");
+        btnRuta.className = act;
+      } else {
+        document.getElementById("subvista-ot").classList.remove("hidden");
+        btnOt.className = act;
+      }
+    }
+
+    function actualizarCheckArranque() {
+      const selects = document.querySelectorAll(".check-select");
+      let fallasCount = 0;
+
+      selects.forEach(sel => {
+        if (sel.value === "FALLA") {
+          fallasCount++;
+          sel.className = "check-select bg-rose-950/80 border border-rose-600 rounded px-2 py-1 text-xs font-mono font-bold text-rose-300";
+        } else {
+          sel.className = "check-select bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs font-mono font-bold text-emerald-400";
+        }
+      });
+
+      const banner = document.getElementById("check-status-banner");
+      const icon = document.getElementById("check-status-icon");
+      const title = document.getElementById("check-status-title");
+      const desc = document.getElementById("check-status-desc");
+      const badge = document.getElementById("check-status-badge");
+
+      if (fallasCount > 0) {
+        banner.className = "p-4 rounded-xl bg-rose-950/40 border border-rose-600/70 flex items-center justify-between";
+        icon.innerText = "🔴";
+        title.className = "font-bold text-rose-400 text-sm uppercase tracking-wide";
+        title.innerText = `CONDICIÓN INSEGURA — ARRANQUE BLOQUEADO (${fallasCount} ANOMALÍA${fallasCount > 1 ? 'S' : ''})`;
+        desc.innerText = "Se han detectado no conformidades en los controles sensoriales de pre-arranque. Aplique bloqueo físico LOTO con tarjeta roja y avise a Mantenimiento.";
+        badge.className = "px-3 py-1 rounded-lg bg-rose-900/80 text-rose-200 font-mono text-xs font-bold border border-rose-500 animate-pulse";
+        badge.innerText = "BLOQUEO LOTO OBLIGATORIO";
+      } else {
+        banner.className = "p-4 rounded-xl bg-emerald-950/40 border border-emerald-600/60 flex items-center justify-between";
+        icon.innerText = "🟢";
+        title.className = "font-bold text-emerald-300 text-sm uppercase tracking-wide";
+        title.innerText = "CONDICIÓN SEGURA — AUTORIZADO PARA PUESTA EN MARCHA";
+        desc.innerText = "Los 8 puntos sensoriales de control de pre-arranque cumplen los estándares admisibles. Lazo de seguridad cerrado.";
+        badge.className = "px-3 py-1 rounded-lg bg-emerald-900/80 text-emerald-200 font-mono text-xs font-bold border border-emerald-500";
+        badge.innerText = "PUESTA EN MARCHA HABILITADA";
+      }
+    }
+
+    function marcarTodoCheckConforme() {
+      document.querySelectorAll(".check-select").forEach(sel => {
+        sel.value = "OK";
+      });
+      actualizarCheckArranque();
+    }
+
+    function simularFallaCheck() {
+      const selects = document.querySelectorAll(".check-select");
+      if (selects.length >= 3) {
+        selects[0].value = "FALLA"; // Motor con polvo
+        selects[2].value = "FALLA"; // Latiguillo con fuga
+      }
+      actualizarCheckArranque();
+    }
+
+    function restaurarCheck() {
+      marcarTodoCheckConforme();
     }
 
     // ===================================================================
