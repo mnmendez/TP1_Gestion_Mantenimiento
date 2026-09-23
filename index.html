@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TP N°1 - Gestión y Mantenimiento Electromecánico (UTN FRSR)</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <!-- KaTeX for math formulas -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap');
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #0b1120;
+      color: #f1f5f9;
+    }
+    .font-mono { font-family: 'Fira Code', monospace; }
+    
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 7px; height: 7px; }
+    ::-webkit-scrollbar-track { background: #0f172a; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+    /* Print styles */
+    @media print {
+      body { background: #ffffff !important; color: #000000 !important; }
+      .no-print { display: none !important; }
+      .print-only { display: block !important; }
+      .tab-content { display: block !important; }
+      .card-print {
+        border: 1px solid #cbd5e1 !important;
+        background: #ffffff !important;
+        color: #0f172a !important;
+        box-shadow: none !important;
+        break-inside: avoid;
+      }
+      table { border-collapse: collapse !important; width: 100% !important; }
+      th, td { border: 1px solid #94a3b8 !important; color: #0f172a !important; }
+      th { background-color: #f1f5f9 !important; }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-blue-600 selection:text-white">
+
+  <!-- HEADER INSTITUCIONAL -->
+  <header class="border-b border-slate-800 bg-slate-900/90 backdrop-blur sticky top-0 z-50 no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-800 flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-blue-500/25">
+          ⚙️
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-base sm:text-lg font-bold tracking-tight text-white">
+              Gestión y Mantenimiento Electromecánico — TP N°1
+            </h1>
+            <span class="bg-blue-500/20 text-blue-400 border border-blue-500/30 text-[11px] px-2 py-0.5 rounded-md font-mono font-medium">UTN FRSR</span>
+          </div>
+          <p class="text-xs text-slate-400">Línea Principal de Elevación y Transporte de Áridos de Alta Densidad | Ciclo 2026</p>
+        </div>
+      </div>
+
+      <!-- BOTONES DE ACCIÓN RÁPIDA -->
+      <div class="flex items-center gap-2">
+        <button onclick="window.print()" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium border border-slate-700 flex items-center gap-1.5 transition">
+          <span>🖨️</span> Imprimir / PDF
+        </button>
+        <a href="TP1_GESTIÓN Y MANTENIMIENTO ELECTROMECÁNICO_RESUELTO.docx" download class="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-medium shadow flex items-center gap-1.5 transition">
+          <span>📥</span> Descargar Word (.docx)
+        </a>
+        <a href="TP1_Gestion_Mantenimiento_UTN.xlsx" download class="px-3 py-1.5 rounded-lg bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-medium shadow flex items-center gap-1.5 transition">
+          <span>📊</span> Descargar Excel (.xlsx)
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENEDOR PRINCIPAL -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full grid grid-cols-1 lg:grid-cols-4 gap-6">
+
+    <!-- PANEL LATERAL: CONTROLES Y PARÁMETROS DINÁMICOS -->
+    <aside class="lg:col-span-1 space-y-5 no-print">
+      <!-- PARÁMETROS ECONÓMICOS -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-sm space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+          <h2 class="text-sm font-bold text-slate-200 uppercase tracking-wider flex items-center gap-2">
+            <span>⚙️</span> Parámetros Operativos
+          </h2>
+          <button onclick="restaurarValores()" class="text-[11px] text-blue-400 hover:text-blue-300 font-medium">Reset</button>
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-slate-400 mb-1">Tiempo Operativo (TOP) [h/año]</label>
+          <input type="number" id="inp-top" value="7200" step="100" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-sm font-mono text-white focus:outline-none focus:border-blue-500" oninput="recalcularTodo()">
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-slate-400 mb-1">Costo Parada Planta [USD/h]</label>
+          <input type="number" id="inp-cparada" value="2500" step="100" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-sm font-mono text-white focus:outline-none focus:border-blue-500" oninput="recalcularTodo()">
+        </div>
+
+        <div>
+          <label class="block text-xs font-medium text-slate-400 mb-1">Costo Mano de Obra [USD/HH]</label>
+          <input type="number" id="inp-cmo" value="25" step="1" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-sm font-mono text-white focus:outline-none focus:border-blue-500" oninput="recalcularTodo()">
+        </div>
+
+        <div class="pt-2 border-t border-slate-800">
+          <label class="flex items-center justify-between cursor-pointer">
+            <span class="text-xs font-medium text-slate-300">Supuesto con Repetición</span>
+            <input type="checkbox" id="toggle-rep" class="sr-only peer" onchange="recalcularTodo()">
+            <div class="w-9 h-5 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-blue-600 relative"></div>
+          </label>
+          <p class="text-[11px] text-slate-400 mt-1">Desglosa F1-F5 en sus ocurrencias según duración de tarea (\(N_{est} \approx 9\)).</p>
+        </div>
+      </div>
+
+      <!-- DATOS DEL ALUMNO PARA EL INFORME -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-sm space-y-3">
+        <h2 class="text-sm font-bold text-slate-200 uppercase tracking-wider flex items-center gap-2 border-b border-slate-800 pb-2">
+          <span>👤</span> Datos para el Informe
+        </h2>
+        <div>
+          <label class="block text-xs font-medium text-slate-400 mb-1">Alumno / Integrantes</label>
+          <input type="text" id="inp-alumno" value="Martín Méndez" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-blue-500" oninput="actualizarAlumno()">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-400 mb-1">Legajo / Matrícula</label>
+          <input type="text" id="inp-legajo" value="UTN FRSR" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-blue-500" oninput="actualizarAlumno()">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-400 mb-1">Ciclo Lectivo</label>
+          <input type="text" id="inp-anio" value="2026" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-sm text-white focus:outline-none focus:border-blue-500" oninput="actualizarAlumno()">
+        </div>
+      </div>
+
+      <!-- RESUMEN EN VIVO DE KPIS -->
+      <div class="bg-gradient-to-br from-blue-950/60 to-slate-900 border border-blue-900/40 rounded-2xl p-5 shadow-sm space-y-3">
+        <h2 class="text-xs font-bold text-blue-400 uppercase tracking-wider flex items-center gap-1.5">
+          <span>📈</span> Confiabilidad en Vivo
+        </h2>
+        <div class="grid grid-cols-2 gap-2">
+          <div class="bg-slate-800/80 p-2.5 rounded-xl border border-slate-700/50">
+            <span class="text-[10px] text-slate-400 block uppercase">MTBF</span>
+            <span id="side-mtbf" class="text-base font-bold font-mono text-white">1,416.0 h</span>
+          </div>
+          <div class="bg-slate-800/80 p-2.5 rounded-xl border border-slate-700/50">
+            <span class="text-[10px] text-slate-400 block uppercase">MTTR</span>
+            <span id="side-mttr" class="text-base font-bold font-mono text-white">24.0 h</span>
+          </div>
+          <div class="bg-slate-800/80 p-2.5 rounded-xl border border-slate-700/50">
+            <span class="text-[10px] text-slate-400 block uppercase">Disp. (Ai = Ao)</span>
+            <span id="side-disp" class="text-base font-bold font-mono text-emerald-400">98.33%</span>
+          </div>
+          <div class="bg-slate-800/80 p-2.5 rounded-xl border border-slate-700/50">
+            <span class="text-[10px] text-slate-400 block uppercase">Costo Total</span>
+            <span id="side-costo" class="text-base font-bold font-mono text-rose-400">$313,620</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ÁREA DE CONTENIDO: PESTAÑAS Y SECCIONES -->
+    <main class="lg:col-span-3 space-y-6">
+
+      <!-- BARRA DE NAVEGACIÓN DE PESTAÑAS -->
+      <div class="flex items-center gap-2 border-b border-slate-800 overflow-x-auto pb-2 no-print text-sm">
+        <button onclick="cambiarPestana('tab-taxo')" id="btn-tab-taxo" class="tab-btn px-3.5 py-2 rounded-xl font-medium transition text-white bg-blue-600 shadow-sm flex items-center gap-1.5 whitespace-nowrap">
+          <span>1.</span> Taxonomía ISO 14224
+        </button>
+        <button onclick="cambiarPestana('tab-kpis')" id="btn-tab-kpis" class="tab-btn px-3.5 py-2 rounded-xl font-medium transition text-slate-400 hover:text-slate-200 hover:bg-slate-800 flex items-center gap-1.5 whitespace-nowrap">
+          <span>2.</span> Fallas y KPIs
+        </button>
+        <button onclick="cambiarPestana('tab-criticidad')" id="btn-tab-criticidad" class="tab-btn px-3.5 py-2 rounded-xl font-medium transition text-slate-400 hover:text-slate-200 hover:bg-slate-800 flex items-center gap-1.5 whitespace-nowrap">
+          <span>3.</span> Criticidad Dinámica
+        </button>
+        <button onclick="cambiarPestana('tab-dash')" id="btn-tab-dash" class="tab-btn px-3.5 py-2 rounded-xl font-medium transition text-slate-400 hover:text-slate-200 hover:bg-slate-800 flex items-center gap-1.5 whitespace-nowrap">
+          <span>4.</span> Dashboard Gráficos
+        </button>
+        <button onclick="cambiarPestana('tab-informe')" id="btn-tab-informe" class="tab-btn px-3.5 py-2 rounded-xl font-medium transition text-slate-400 hover:text-slate-200 hover:bg-slate-800 flex items-center gap-1.5 whitespace-nowrap">
+          <span>5.</span> Informe Técnico Oficial
+        </button>
+      </div>
+
+      <!-- =================================================================== -->
+      <!-- PESTAÑA 1: TAXONOMÍA DEL ACTIVO (ISO 14224) -->
+      <!-- =================================================================== -->
+      <section id="tab-taxo" class="tab-content space-y-6">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-sm">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                <span>🏗️</span> Jerarquía de Activos — Norma ISO 14224
+              </h2>
+              <p class="text-xs text-slate-400">Estructura taxonómica a 6 niveles del sistema electromecánico y criterios de mantenimiento.</p>
+            </div>
+          </div>
+
+          <!-- ÁRBOL JERÁRQUICO -->
+          <div class="space-y-3 font-mono text-xs bg-slate-950 p-5 rounded-xl border border-slate-800/80">
+            <div class="flex items-center gap-2 text-slate-400">
+              <span class="px-2 py-0.5 rounded bg-slate-800 text-[10px] text-slate-300 font-sans">Nivel 2</span>
+              <span class="text-slate-200 font-semibold font-sans">Complejo Industrial:</span> Planta de Procesamiento de Minerales / Áridos
+            </div>
+            <div class="ml-4 pl-3 border-l-2 border-slate-800 space-y-3">
+              <div class="flex items-center gap-2 text-slate-400">
+                <span class="px-2 py-0.5 rounded bg-slate-800 text-[10px] text-slate-300 font-sans">Nivel 3</span>
+                <span class="text-slate-200 font-semibold font-sans">Área Operativa:</span> Sección de Elevación, Transporte y Molienda Primaria
+              </div>
+              <div class="ml-4 pl-3 border-l-2 border-slate-800 space-y-3">
+                <div class="flex items-center gap-2 text-blue-400">
+                  <span class="px-2 py-0.5 rounded bg-blue-900/60 text-[10px] text-blue-300 font-sans">Nivel 4</span>
+                  <span class="text-blue-200 font-semibold font-sans">Unidad de Proceso / Equipo:</span> Cinta Transportadora Principal (CV-01)
+                </div>
+                <div class="ml-4 pl-3 border-l-2 border-blue-900/40 space-y-3">
+                  <!-- SUBSISTEMAS -->
+                  <div class="p-3 bg-slate-900/80 rounded-lg border border-slate-800">
+                    <span class="px-2 py-0.5 rounded bg-rose-900/50 text-[10px] text-rose-300 font-sans font-bold">Nivel 5 · SYS-MOT</span>
+                    <span class="font-sans font-semibold text-white ml-2">Unidad Motriz y Accionamiento</span>
+                    <p class="text-slate-400 font-sans text-xs mt-1">Motor asincrónico trifásico 55 kW, Reductor ortogonal de 3 etapas i=28:1, Arrancador suave electrónico.</p>
+                  </div>
+                  <div class="p-3 bg-slate-900/80 rounded-lg border border-slate-800">
+                    <span class="px-2 py-0.5 rounded bg-rose-900/50 text-[10px] text-rose-300 font-sans font-bold">Nivel 5 · SYS-BAN</span>
+                    <span class="font-sans font-semibold text-white ml-2">Banda Continua y Rodillos de Apoyo</span>
+                    <p class="text-slate-400 font-sans text-xs mt-1">Cinta multicapa de alta resistencia, tambor motriz Ø500mm con cerámico, tambor de reenvío, estaciones de rodillos.</p>
+                  </div>
+                  <div class="p-3 bg-slate-900/80 rounded-lg border border-slate-800">
+                    <span class="px-2 py-0.5 rounded bg-amber-900/50 text-[10px] text-amber-300 font-sans font-bold">Nivel 5 · SYS-TEN</span>
+                    <span class="font-sans font-semibold text-white ml-2">Sistema Oleohidráulico de Tensión Automática</span>
+                    <p class="text-slate-400 font-sans text-xs mt-1">Centralita con bomba de engranajes (20 bar), cilindro hidráulico de doble efecto, latiguillos y presostatos.</p>
+                  </div>
+                  <div class="p-3 bg-slate-900/80 rounded-lg border border-slate-800">
+                    <span class="px-2 py-0.5 rounded bg-emerald-900/50 text-[10px] text-emerald-300 font-sans font-bold">Nivel 5 · SYS-EST</span>
+                    <span class="font-sans font-semibold text-white ml-2">Estructura, Chasis y Limpieza</span>
+                    <p class="text-slate-400 font-sans text-xs mt-1">Bastidor metálico, tolva de descarga, rascador primario de uretano y secundario de metal duro.</p>
+                  </div>
+                  <div class="p-3 bg-slate-900/80 rounded-lg border border-slate-800">
+                    <span class="px-2 py-0.5 rounded bg-emerald-900/50 text-[10px] text-emerald-300 font-sans font-bold">Nivel 5 · SYS-ELE</span>
+                    <span class="font-sans font-semibold text-white ml-2">Control, Instrumentación y Seguridad</span>
+                    <p class="text-slate-400 font-sans text-xs mt-1">Sensores inductivos de desalineación, cables tiradores de emergencia e interbloqueo con reactor.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- LLAMADA: REEMPLAZO VS REPARACIÓN -->
+          <div class="mt-6 p-4 rounded-xl bg-blue-950/40 border border-blue-800/50 flex items-start gap-3">
+            <span class="text-xl">💡</span>
+            <div class="text-xs space-y-1">
+              <h3 class="font-bold text-blue-300 uppercase tracking-wide">Criterio ISO 14224: Reemplazo (MTTF) vs. Reparación (MTBF)</h3>
+              <p class="text-slate-300 leading-relaxed">
+                • <strong>Nivel de Reemplazo (Nivel 6 y 8):</strong> Componentes unitarios indivisibles no reparables (rodamientos oscilantes SKF, latiguillos hidráulicos, labios de rascadores de uretano, retenes). Se gestionan bajo la métrica <strong>MTTF (Mean Time To Failure)</strong>.<br>
+                • <strong>Nivel de Reparación (Nivel 4 y 5):</strong> Sistemas y equipos complejos mantenibles (motor eléctrico, reductor ortogonal, central hidráulica, cinta transportadora completa). Se gestionan bajo la métrica <strong>MTBF (Mean Time Between Failures)</strong>.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================== -->
+      <!-- PESTAÑA 2: REGISTRO DE FALLAS Y KPIS -->
+      <!-- =================================================================== -->
+      <section id="tab-kpis" class="tab-content hidden space-y-6">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-sm">
+          <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
+            <div>
+              <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                <span>📋</span> Registro Anual de Contingencias y Balance Financiero
+              </h2>
+              <p class="text-xs text-slate-400">Edite los tiempos o costos directamente en la tabla. Los costos y KPIs se recalculan en tiempo real.</p>
+            </div>
+            <button onclick="restaurarFallas()" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-medium text-slate-300 border border-slate-700 transition">
+              Restaurar Valores Originales
+            </button>
+          </div>
+
+          <!-- TABLA INTERACTIVA -->
+          <div class="overflow-x-auto rounded-xl border border-slate-800">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-800/90 text-slate-300 font-semibold border-b border-slate-700">
+                <tr>
+                  <th class="p-3 text-center">Evento</th>
+                  <th class="p-3">Subsistema</th>
+                  <th class="p-3">Componente Afectado</th>
+                  <th class="p-3 text-right">TTP [h]</th>
+                  <th class="p-3 text-right">Repuestos [USD]</th>
+                  <th class="p-3 text-right">HH</th>
+                  <th class="p-3 text-right">Costo Parada</th>
+                  <th class="p-3 text-right">Costo MO</th>
+                  <th class="p-3 text-right font-bold text-white">Costo Total</th>
+                </tr>
+              </thead>
+              <tbody id="tabla-fallas-body" class="divide-y divide-slate-800/60 font-mono">
+                <!-- Se inyecta dinámicamente con JS -->
+              </tbody>
+              <tfoot class="bg-slate-950 font-bold border-t-2 border-slate-700 text-white font-mono">
+                <tr id="tabla-fallas-total">
+                  <!-- Totales calculados -->
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+
+          <!-- TARJETAS DE KPIS CALCULADOS -->
+          <div class="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700/60 text-center">
+              <span class="text-[11px] text-slate-400 uppercase tracking-wider block">Tiempo Funcionamiento (TFR)</span>
+              <span id="kpi-tfr" class="text-xl font-bold font-mono text-white mt-1 block">7,080.0 h</span>
+              <span class="text-[10px] text-slate-400">TOP - TTP</span>
+            </div>
+            <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700/60 text-center">
+              <span class="text-[11px] text-slate-400 uppercase tracking-wider block">MTBF (Confiabilidad)</span>
+              <span id="kpi-mtbf" class="text-xl font-bold font-mono text-blue-400 mt-1 block">1,416.0 h</span>
+              <span class="text-[10px] text-slate-400">TFR / N fallas</span>
+            </div>
+            <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700/60 text-center">
+              <span class="text-[11px] text-slate-400 uppercase tracking-wider block">MTTR (Mantenibilidad)</span>
+              <span id="kpi-mttr" class="text-xl font-bold font-mono text-amber-400 mt-1 block">24.0 h</span>
+              <span class="text-[10px] text-slate-400">TTP / N fallas</span>
+            </div>
+            <div class="p-4 rounded-xl bg-slate-800/60 border border-slate-700/60 text-center">
+              <span class="text-[11px] text-slate-400 uppercase tracking-wider block">Disponibilidad (Ai = Ao)</span>
+              <span id="kpi-disp" class="text-xl font-bold font-mono text-emerald-400 mt-1 block">98.33%</span>
+              <span class="text-[10px] text-slate-400">MTBF / (MTBF + MTTR)</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================== -->
+      <!-- PESTAÑA 3: MATRIZ DE CRITICIDAD DINÁMICA -->
+      <!-- =================================================================== -->
+      <section id="tab-criticidad" class="tab-content hidden space-y-6">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-sm">
+          <div class="mb-4">
+            <h2 class="text-lg font-bold text-white flex items-center gap-2">
+              <span>🎯</span> Matriz de Criticidad de los Subsistemas
+            </h2>
+            <p class="text-xs text-slate-400">Evaluación de Frecuencia (\(F\)) y Consecuencia (\(C_i = S + A + O + D\)) para categorizar en Clases A, B y C.</p>
+          </div>
+
+          <!-- TABLA DE CRITICIDAD -->
+          <div class="overflow-x-auto rounded-xl border border-slate-800">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-800/90 text-slate-300 font-semibold border-b border-slate-700">
+                <tr>
+                  <th class="p-3">Subsistema</th>
+                  <th class="p-3 text-center">Frecuencia (F)</th>
+                  <th class="p-3 text-center">Seguridad (S)</th>
+                  <th class="p-3 text-center">Ambiente (A)</th>
+                  <th class="p-3 text-center">Operación (O)</th>
+                  <th class="p-3 text-center">Costo Dir. (D)</th>
+                  <th class="p-3 text-center font-bold text-slate-200">Ci</th>
+                  <th class="p-3 text-center font-bold text-white">Criticidad (C)</th>
+                  <th class="p-3 text-center font-bold">Clase y Modelo Asignado</th>
+                </tr>
+              </thead>
+              <tbody id="tabla-criticidad-body" class="divide-y divide-slate-800/60 font-mono">
+                <!-- Se inyecta dinámicamente -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- MODELOS EXPLICADOS -->
+          <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="p-4 rounded-xl bg-rose-950/30 border border-rose-800/40">
+              <span class="text-xs font-bold text-rose-400 block mb-1">Clase A — CRÍTICO (C ≥ 15)</span>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                <strong>Modelo de Alta Disponibilidad:</strong> Monitoreo continuo CBM (vibraciones y termografía), análisis predictivo de aceite y plan de overhaul programado en paradas mayores.
+              </p>
+            </div>
+            <div class="p-4 rounded-xl bg-amber-950/30 border border-amber-800/40">
+              <span class="text-xs font-bold text-amber-400 block mb-1">Clase B — SEMICRÍTICO (10 ≤ C &lt; 15)</span>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                <strong>Modelo Sistemático / Predictivo:</strong> Re-lubricación periódica por calendario, control de presión de timbrado, inspección preventiva de latiguillos y conteo de partículas ISO 4406.
+              </p>
+            </div>
+            <div class="p-4 rounded-xl bg-emerald-950/30 border border-emerald-800/40">
+              <span class="text-xs font-bold text-emerald-400 block mb-1">Clase C — NO CRÍTICO (C &lt; 10)</span>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                <strong>Modelo Condicional / TPM:</strong> Tareas de Mantenimiento Autónomo (limpieza, inspección, lubricación - CIL) ejecutadas por el operador de planta y atención a la falla.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =================================================================== -->
+      <!-- PESTAÑA 4: DASHBOARD DE GRÁFICOS -->
+      <!-- =================================================================== -->
+      <section id="tab-dash" class="tab-content hidden space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- G1: PARETO DE COSTOS -->
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-sm">
+            <h3 class="text-sm font-bold text-white mb-2">G1 · Diagrama de Pareto de Costos (Regla 80/20)</h3>
+            <div class="h-64">
+              <canvas id="chart-pareto"></canvas>
+            </div>
+          </div>
+
+          <!-- G2: MTTR POR EVENTO -->
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-sm">
+            <h3 class="text-sm font-bold text-white mb-2">G2 · Tiempos de Parada y Reparación (MTTR)</h3>
+            <div class="h-64">
+              <canvas id="chart-mttr"></canvas>
+            </div>
+          </div>
+
+          <!-- G3: ESTRUCTURA DE COSTOS -->
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-sm">
+            <h3 class="text-sm font-bold text-white mb-2">G3 · Estructura de Costos Global (USD)</h3>
+            <div class="h-64 flex items-center justify-center">
+              <canvas id="chart-donut"></canvas>
+            </div>
+          </div>
+
+          <!-- G4: CRONOLOGÍA NOWLAN & HEAP -->
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-sm">
+            <h3 class="text-sm font-bold text-white mb-2">G4 · Cronología y Patrones de Nowlan & Heap</h3>
+            <div class="h-64">
+              <canvas id="chart-nowlan"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 text-xs text-slate-300">
+          💡 <strong>Justificación Técnica de Nowlan & Heap (Consigna 4.b):</strong> El gráfico cronológico evidencia que las contingencias se distribuyen de forma aleatoria a lo largo de las 7.200 horas anuales. Las fallas respondieron a desgaste abrasivo externo (polvo en rodamiento F1, taponamiento en motor F2, piedras en cinta F4), respondiendo a los <strong>Patrones D, E y F</strong> de Nowlan & Heap. La curva de la bañera tradicional (Patrón A) no aplica para este activo.
+        </div>
+      </section>
+
+      <!-- =================================================================== -->
+      <!-- PESTAÑA 5: INFORME TÉCNICO OFICIAL DE CÁTEDRA -->
+      <!-- =================================================================== -->
+      <section id="tab-informe" class="tab-content hidden space-y-6">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-sm card-print space-y-8">
+          
+          <!-- ENCABEZADO FORMAL DE ENTREGA -->
+          <div class="border-b-2 border-blue-600 pb-6 text-center space-y-2">
+            <h2 class="text-lg font-bold text-blue-400 tracking-wider uppercase">UNIVERSIDAD TECNOLÓGICA NACIONAL — FACULTAD REGIONAL SAN RAFAEL</h2>
+            <h3 class="text-sm font-medium text-slate-300">Cátedra: Gestión y Mantenimiento Electromecánico · Especialidad: Ingeniería Electromecánica</h3>
+            <div class="pt-2">
+              <h1 class="text-xl sm:text-2xl font-extrabold text-white tracking-tight">TRABAJO PRÁCTICO N° 1: INFORME TÉCNICO OFICIAL</h1>
+              <p class="text-xs text-blue-300 font-mono mt-1">Confiabilidad, Parámetros Operativos, Tareas de Inspección y Estrategias de Mantenimiento</p>
+            </div>
+            <div class="pt-3 text-xs text-slate-400 font-mono">
+              Alumno(s): <strong id="doc-alumno" class="text-white">Martín Méndez</strong> | Legajo: <strong id="doc-legajo" class="text-white">UTN FRSR</strong> | Ciclo Lectivo: <strong id="doc-anio" class="text-white">2026</strong>
+            </div>
+          </div>
+
+          <!-- 1. CONTEXTO INDUSTRIAL -->
+          <div class="space-y-3 text-xs leading-relaxed text-slate-300">
+            <h3 class="text-sm font-bold text-blue-400 uppercase tracking-wide border-b border-slate-800 pb-1">1. Contexto Industrial</h3>
+            <p>
+              El estudio técnico se efectúa sobre la <strong>Línea Principal de Elevación y Transporte de Áridos de Alta Densidad</strong> de un complejo industrial continuo. La instalación opera en régimen continuo de 24 horas/día durante 300 días al año (<span id="doc-top" class="font-mono text-white">7,200</span> h/año). La parada imprevista detiene el suministro a un reactor donde la masa se petrifica, ocasionando costos catastróficos por lucro cesante y limpieza manual.
+            </p>
+            <p>
+              <strong>Componentes electromecánicos clave:</strong> Motor asincrónico trifásico 55 kW (IP55, Clase F) con arrancador suave; Reductor ortogonal de engranajes helicoidales de 3 etapas (\(i = 28:1\)) lubricado con ISO VG 220; Polea motriz Ø500 mm con revestimiento cerámico sobre rodamientos oscilantes SKF 22220 EK en soportes monobloc SNH; Centralita oleohidráulica de tensionado (20 bar); y Sistema de limpieza de doble rascador (uretano y metal duro).
+            </p>
+          </div>
+
+          <!-- 2. DESAFÍO PRÁCTICO -->
+          <div class="space-y-3 text-xs leading-relaxed text-slate-300">
+            <h3 class="text-sm font-bold text-blue-400 uppercase tracking-wide border-b border-slate-800 pb-1">2. Registro Oficial de Fallas del Ciclo Anual</h3>
+            <p>Se registraron 5 contingencias operativas imprevistas durante el ciclo evaluado:</p>
+            <div class="overflow-x-auto rounded-lg border border-slate-800">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-slate-800 text-slate-200">
+                  <tr>
+                    <th class="p-2.5 text-center">Evento</th>
+                    <th class="p-2.5">Descripción Técnica de la Falla</th>
+                    <th class="p-2.5 text-right">TTP [h]</th>
+                    <th class="p-2.5 text-right">Repuestos [USD]</th>
+                    <th class="p-2.5 text-right">HH</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800 text-slate-300 font-mono">
+                  <tr>
+                    <td class="p-2.5 text-center font-bold text-white">F1</td>
+                    <td class="p-2.5 font-sans">Spalling en pista exterior de rodamiento SKF 22220 EK lado acople por contaminación de polvo abrasivo y degradación de grasa.</td>
+                    <td class="p-2.5 text-right">28</td>
+                    <td class="p-2.5 text-right">$1,850</td>
+                    <td class="p-2.5 text-right">48</td>
+                  </tr>
+                  <tr>
+                    <td class="p-2.5 text-center font-bold text-white">F2</td>
+                    <td class="p-2.5 font-sans">Sobrecalentamiento y cortocircuito entre espiras en estator de motor 55 kW por bloqueo de ventilador con polvo. Rebobinado completo.</td>
+                    <td class="p-2.5 text-right">42</td>
+                    <td class="p-2.5 text-right">$3,400</td>
+                    <td class="p-2.5 text-right">24</td>
+                  </tr>
+                  <tr>
+                    <td class="p-2.5 text-center font-bold text-white">F3</td>
+                    <td class="p-2.5 font-sans">Fisura por fatiga por pulsación en latiguillo de alta presión; pérdida de presión y disparo de interbloqueo.</td>
+                    <td class="p-2.5 text-right">6</td>
+                    <td class="p-2.5 text-right">$320</td>
+                    <td class="p-2.5 text-right">12</td>
+                  </tr>
+                  <tr>
+                    <td class="p-2.5 text-center font-bold text-white">F4</td>
+                    <td class="p-2.5 font-sans">Desalineación severa por colmatación de finos en tambor de reenvío; desgarro longitudinal de 15 m de banda. Vulcanizado en caliente.</td>
+                    <td class="p-2.5 text-right">36</td>
+                    <td class="p-2.5 text-right">$4,200</td>
+                    <td class="p-2.5 text-right">36</td>
+                  </tr>
+                  <tr>
+                    <td class="p-2.5 text-center font-bold text-white">F5</td>
+                    <td class="p-2.5 font-sans">Atrancamiento y fricción de rascador de uretano desgastado; sobrecarga mecánica y sobretemperatura de aceite en reductor.</td>
+                    <td class="p-2.5 text-right">8</td>
+                    <td class="p-2.5 text-right">$450</td>
+                    <td class="p-2.5 text-right">16</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- 3. CONSIGNAS RESUELTAS -->
+          <div class="space-y-6 text-xs leading-relaxed text-slate-300">
+            <h3 class="text-sm font-bold text-blue-400 uppercase tracking-wide border-b border-slate-800 pb-1">3. Resolución Técnica de Consignas</h3>
+
+            <!-- CONSIGNA 1 -->
+            <div class="space-y-2">
+              <h4 class="font-bold text-white text-xs">Consigna 1: Jerarquía de Activos (ISO 14224) y Modelos de Mantenimiento</h4>
+              <p>
+                <strong>a) Árbol Taxonómico y Decisión Reemplazo vs. Reparación:</strong> Siguiendo la ISO 14224, la instalación se estructura desde Planta (N2), Área (N3), Unidad/Equipo (N4 CV-01), Sistemas (N5 Unidad Motriz, Banda, Tensión, Chasis, Control), Componentes (N6 rodamientos, motor, reductor) hasta Elementos (N8 pistas, sellos, bobinas).
+              </p>
+              <div class="p-3 bg-slate-950 rounded-lg border border-slate-800 font-mono text-[11px]">
+                • <strong>Decisiones de Reemplazo (MTTF):</strong> Aplica a componentes unitarios no reparables (Nivel 6 descartable y Nivel 8: rodamientos SKF, mangueras hidráulicas, sellos O-ring, cuchilla de uretano).<br>
+                • <strong>Decisiones de Reparación (MTBF):</strong> Aplica a sistemas y equipos reparables (Nivel 4 cinta completa y Nivel 5: motor eléctrico, reductor de velocidad, central oleohidráulica).
+              </div>
+              <p>
+                <strong>b) y c) Justificación de Modelos de Mantenimiento según Criticidad:</strong>
+                <br>• <em>Unidad Motriz (\(C=51\) · Clase A):</em> Modelo de Alta Disponibilidad. Monitoreo continuo de vibraciones y corriente estatórica; overhaul programado de rodamientos y engranajes.
+                <br>• <em>Banda y Rodillos (\(C=51\) · Clase A):</em> Modelo de Alta Disponibilidad. Inspección ultrasónica de empalmes vulcanizados y alineación continua con sensores inductivos.
+                <br>• <em>Sistema de Tensión (\(C=16\) · Clase B):</em> Modelo Sistemático / Predictivo. Análisis semestral de aceite hidráulico y reemplazo programado de latiguillos.
+                <br>• <em>Estructura y Chasis (\(C=12\) · Clase B/C):</em> Modelo Condicional / TPM. Rutina CIL ejecutada por operadores y remoción de incrustaciones de áridos.
+                <br>• <em>Tablero y Control (\(C=7\) · Clase C):</em> Modelo Condicional / TPM. Termografía semestral y limpieza de filtros.
+              </p>
+            </div>
+
+            <!-- CONSIGNA 2 -->
+            <div class="space-y-2">
+              <h4 class="font-bold text-white text-xs">Consigna 2: Ruta de Inspección Rutinaria (Sensorial vs. Instrumental)</h4>
+              <p>
+                • <strong>Inspecciones Sensoriales (Operador / TPM en marcha):</strong> Control visual de filos y holguras en rascadores de uretano (diario por turno); inspección auditiva y visual de tambores de reenvío para evitar apelmazamiento de mineral (diario); y verificación de estanqueidad en racores hidráulicos y nivel de aceite (diario).<br>
+                • <strong>Inspecciones Instrumentales (Mantenimiento / Predictivo):</strong> Medición de aceleración RMS y envolvente en rodamientos SKF 22220 EK con vibrómetro portátil y ultrasonido (quincenal); termografía infrarroja en carcasa de motor 55 kW y borneras (mensual); y análisis de aceite sintético ISO VG 220 en laboratorio especializado (trimestral).
+              </p>
+            </div>
+
+            <!-- CONSIGNA 3: TABLA 3 OFICIAL COMPLETADA -->
+            <div class="space-y-2">
+              <h4 class="font-bold text-white text-xs">Consigna 3: Tabla Comparativa de Mantenimiento Proactivo (Tabla 3 del TP)</h4>
+              <div class="overflow-x-auto rounded-lg border border-slate-800">
+                <table class="w-full text-left text-xs">
+                  <thead class="bg-slate-800 text-slate-200">
+                    <tr>
+                      <th class="p-2 text-center">Evento</th>
+                      <th class="p-2">Componente Afectado</th>
+                      <th class="p-2">Tipo de Mantenimiento Propuesto</th>
+                      <th class="p-2">Tarea de Inspección o Técnica Asociada</th>
+                      <th class="p-2">Frecuencia</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-800 font-mono text-slate-300">
+                    <tr>
+                      <td class="p-2 text-center font-bold text-white">F1</td>
+                      <td class="p-2 font-sans">Rodamiento oscilante SKF 22220 EK</td>
+                      <td class="p-2 font-sans text-blue-300">Predictivo (CBM)</td>
+                      <td class="p-2 font-sans">Análisis de vibraciones (envolvente) y lubricación por ultrasonido.</td>
+                      <td class="p-2 font-sans">Quincenal</td>
+                    </tr>
+                    <tr>
+                      <td class="p-2 text-center font-bold text-white">F2</td>
+                      <td class="p-2 font-sans">Motor asincrónico 55 kW</td>
+                      <td class="p-2 font-sans text-emerald-300">Autónomo (TPM) / Predictivo</td>
+                      <td class="p-2 font-sans">Limpieza de carcasa y ventilador + Termografía y ensayo de Megado.</td>
+                      <td class="p-2 font-sans">Semanal / Mensual</td>
+                    </tr>
+                    <tr>
+                      <td class="p-2 text-center font-bold text-white">F3</td>
+                      <td class="p-2 font-sans">Latiguillo de alta presión</td>
+                      <td class="p-2 font-sans text-amber-300">Preventivo Sistemático</td>
+                      <td class="p-2 font-sans">Inspección de fatiga por pulsación y reemplazo preventivo por vida límite.</td>
+                      <td class="p-2 font-sans">2 años</td>
+                    </tr>
+                    <tr>
+                      <td class="p-2 text-center font-bold text-white">F4</td>
+                      <td class="p-2 font-sans">Banda transportadora</td>
+                      <td class="p-2 font-sans text-emerald-300">Autónomo (TPM) / Seguridad</td>
+                      <td class="p-2 font-sans">Limpieza de tambor de reenvío e interbloqueo por inductivos de desalineación.</td>
+                      <td class="p-2 font-sans">Diaria / Por turno</td>
+                    </tr>
+                    <tr>
+                      <td class="p-2 text-center font-bold text-white">F5</td>
+                      <td class="p-2 font-sans">Rascador de uretano</td>
+                      <td class="p-2 font-sans text-emerald-300">Autónomo (TPM)</td>
+                      <td class="p-2 font-sans">Inspección diaria de desgaste de labio y regulación de tensión en contrapeso.</td>
+                      <td class="p-2 font-sans">Diaria (inicio turno)</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- CONSIGNA 4 -->
+            <div class="space-y-2">
+              <h4 class="font-bold text-white text-xs">Consigna 4: Indicadores de Confiabilidad y Patrones de Nowlan & Heap</h4>
+              <p>
+                <strong>a) Memoria de Cálculo de KPIs:</strong>
+                <br>• Tiempo de Paradas: \(TTP = 120.0\text{ h}\).
+                <br>• Tiempo de Funcionamiento Real: \(TFR = 7,200.0 - 120.0 = 7,080.0\text{ h}\).
+                <br>• <em>Escenario Base (\(N = 5\)):</em> \(MTBF = 7,080 / 5 = \mathbf{1,416.00\text{ h}}\); \(MTTR = 120 / 5 = \mathbf{24.00\text{ h}}\); \(A_i = A_o = \mathbf{98.33\%}\).
+                <br>• <em>Escenario Refinado de Ingeniería (\(N_{est} \approx 9\)):</em> \(MTBF = 7,080 / 9 = \mathbf{786.67\text{ h}}\); \(MTTR = 120 / 9 = \mathbf{13.33\text{ h}}\); \(A_i = A_o = \mathbf{98.33\%}\).
+              </p>
+              <p>
+                <strong>b) Justificación de Nowlan & Heap:</strong> El activo <strong>no responde al Patrón A (curva de la bañera)</strong>. Las fallas registradas se debieron a agentes aleatorios de ensuciamiento y abrasión (polvo mineral, piedras en tambor, picos de pulsación). Responden a los <strong>Patrones D, E y F</strong> de Nowlan & Heap (fallas prematuras y aleatorias incondicionales a la edad). En consecuencia, un reemplazo rígido por calendario no previene estas averías y fomenta la mortalidad infantil por errores humanos durante el montaje (Patrón F).
+              </p>
+            </div>
+
+            <!-- CONSIGNA 5: TABLA 4 OFICIAL COMPLETADA -->
+            <div class="space-y-2">
+              <h4 class="font-bold text-white text-xs">Consigna 5: Evaluación Financiera y Estrategia de Motor Standby (Tabla 4 del TP)</h4>
+              <div class="overflow-x-auto rounded-lg border border-slate-800">
+                <table class="w-full text-left text-xs">
+                  <thead class="bg-slate-800 text-slate-200">
+                    <tr>
+                      <th class="p-2 text-center">Evento</th>
+                      <th class="p-2 text-right">TTP [h]</th>
+                      <th class="p-2 text-right">Costo Parada [USD]</th>
+                      <th class="p-2 text-right">Repuestos [USD]</th>
+                      <th class="p-2 text-right">HH</th>
+                      <th class="p-2 text-right">Costo MO [USD]</th>
+                      <th class="p-2 text-right font-bold text-white">Costo Total [USD]</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-800 font-mono text-slate-300">
+                    <tr>
+                      <td class="p-2 text-center font-bold text-white">F1</td>
+                      <td class="p-2 text-right">28</td>
+                      <td class="p-2 text-right">$70,000</td>
+                      <td class="p-2 text-right">$1,850</td>
+                      <td class="p-2 text-right">48</td>
+                      <td class="p-2 text-right">$1,200</td>
+                      <td class="p-2 text-right">$73,050</td>
+                    </tr>
+                    <tr>
+                      <td class="p-2 text-center font-bold text-rose-400">F2</td>
+                      <td class="p-2 text-right text-rose-400 font-bold">42</td>
+                      <td class="p-2 text-right text-rose-400">$105,000</td>
+                      <td class="p-2 text-right">$3,400</td>
+                      <td class="p-2 text-right">24</td>
+                      <td class="p-2 text-right">$600</td>
+                      <td class="p-2 text-right text-rose-400 font-bold">$109,000</td>
+                    </tr>
+                    <tr>
+                      <td class="p-2 text-center font-bold text-white">F3</td>
+                      <td class="p-2 text-right">6</td>
+                      <td class="p-2 text-right">$15,000</td>
+                      <td class="p-2 text-right">$320</td>
+                      <td class="p-2 text-right">12</td>
+                      <td class="p-2 text-right">$300</td>
+                      <td class="p-2 text-right">$15,620</td>
+                    </tr>
+                    <tr>
+                      <td class="p-2 text-center font-bold text-white">F4</td>
+                      <td class="p-2 text-right">36</td>
+                      <td class="p-2 text-right">$90,000</td>
+                      <td class="p-2 text-right">$4,200</td>
+                      <td class="p-2 text-right">36</td>
+                      <td class="p-2 text-right">$900</td>
+                      <td class="p-2 text-right">$95,100</td>
+                    </tr>
+                    <tr>
+                      <td class="p-2 text-center font-bold text-white">F5</td>
+                      <td class="p-2 text-right">8</td>
+                      <td class="p-2 text-right">$20,000</td>
+                      <td class="p-2 text-right">$450</td>
+                      <td class="p-2 text-right">16</td>
+                      <td class="p-2 text-right">$400</td>
+                      <td class="p-2 text-right">$20,850</td>
+                    </tr>
+                  </tbody>
+                  <tfoot class="bg-slate-950 font-bold border-t-2 border-slate-700 text-white font-mono">
+                    <tr>
+                      <td class="p-2 text-center">TOTAL</td>
+                      <td class="p-2 text-right">120</td>
+                      <td class="p-2 text-right">$300,000</td>
+                      <td class="p-2 text-right">$10,220</td>
+                      <td class="p-2 text-right">136</td>
+                      <td class="p-2 text-right">$3,400</td>
+                      <td class="p-2 text-right text-rose-400 text-sm">$313,620</td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+              <p>
+                <strong>b) Falla de Mayor Daño y Estrategia Standby:</strong> El Evento F2 (motor eléctrico) produjo las mayores pérdidas económicas (<strong>$109,000 USD</strong> / 34.75% del total). Contar con un motor de reserva Standby en el pañol reduce el tiempo de restitución de 42 h (retraso en bobinado externo) a solo 4 h (sustitución electromecánica in situ y alineación láser), generando un <strong>ahorro neto de $95,000 USD</strong> en un único evento, lo que amortiza el motor (~$3,500 USD) más de 25 veces.
+              </p>
+            </div>
+
+            <!-- CONSIGNA 6 -->
+            <div class="space-y-2">
+              <h4 class="font-bold text-white text-xs">Consigna 6: Hipótesis Diagnóstica de Falla Combinada (Efecto Dominó en F5)</h4>
+              <p>
+                <strong>Secuencia Causa-Efecto Electromecánica:</strong>
+                <br>1. <em>Desgaste de rascador:</em> El uretano sufre abrasión severa y pérdida de geometría.
+                <br>2. <em>Trabamiento mecánico:</em> El soporte roza contra la banda, disparando la fuerza de fricción resistente (\(F_r = \mu \cdot F_n \uparrow\)).
+                <br>3. <em>Respuesta del Motor Asincrónico:</em> Para mantener la velocidad, el motor incrementa su deslizamiento (\(s \uparrow\)) y demanda más corriente de línea (\(I_1 \propto T_{res}\)), elevando las pérdidas por efecto Joule (\(P = 3 I^2 R\)).
+                <br>4. <em>Sobrecarga Térmica en Reductor:</em> El alto par torsional sobrecalienta el reductor de 3 etapas (\(i=28:1\)), llevando el aceite ISO VG 220 a \(> 95\text{ °C}\). A esa temperatura, la viscosidad cae drásticamente, rompiendo la película lubricante elastohidrodinámica (EHL) y acelerando el micro-pitting en los dientes.
+                <br>• <strong>Interrupción por Mantenimiento Autónomo (TPM):</strong> Una simple inspección visual y palpado de 3 minutos al inicio del turno por parte del operador detecta el desgaste incipiente o desajuste de tensión, permitiendo regular el contrapeso antes del trabamiento mecánico y abortando el efecto dominó en el eslabón 1.
+              </p>
+            </div>
+
+          </div>
+
+          <!-- FIRMA / CIERRE -->
+          <div class="pt-6 border-t border-slate-800 flex justify-between items-center text-xs text-slate-400">
+            <span>UTN Facultad Regional San Rafael</span>
+            <span>Cátedra de Gestión y Mantenimiento Electromecánico</span>
+            <span>San Rafael, Mendoza · 2026</span>
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+
+  </div>
+
+  <!-- JAVASCRIPT REACTIVO Y LÓGICA DE CÁLCULO -->
+  <script>
+    // --- DATOS INICIALES DEL TP ---
+    const FALLAS_BASE = [
+      { evento: "F1", subsistema: "Unidad Motriz", componente: "Rodamiento oscilante SKF 22220 EK", ttp: 28, repuestos: 1850, hh: 48, t0: 14, cuadrilla: 2, n_est: 2 },
+      { evento: "F2", subsistema: "Unidad Motriz", componente: "Motor eléctrico 55 kW (estator)", ttp: 42, repuestos: 3400, hh: 24, t0: 42, cuadrilla: 2, n_est: 1 },
+      { evento: "F3", subsistema: "Sistema de Tensión", componente: "Latiguillo de alta presión", ttp: 6, repuestos: 320, hh: 12, t0: 3, cuadrilla: 2, n_est: 2 },
+      { evento: "F4", subsistema: "Banda y Rodillos", componente: "Banda continua (cubierta de goma)", ttp: 36, repuestos: 4200, hh: 36, t0: 18, cuadrilla: 2, n_est: 2 },
+      { evento: "F5", subsistema: "Estructura y Chasis", componente: "Rascador primario de uretano", ttp: 8, repuestos: 450, hh: 16, t0: 4, cuadrilla: 2, n_est: 2 }
+    ];
+
+    let fallasVigentes = JSON.parse(JSON.stringify(FALLAS_BASE));
+    let chartsInstanciados = {};
+
+    function recalcularTodo() {
+      const top = parseFloat(document.getElementById("inp-top").value) || 7200;
+      const cparada = parseFloat(document.getElementById("inp-cparada").value) || 2500;
+      const cmo = parseFloat(document.getElementById("inp-cmo").value) || 25;
+      const conRep = document.getElementById("toggle-rep").checked;
+
+      // Calcular desglose de fallas si toggle con repetición está activo
+      let filas = [];
+      if (conRep) {
+        fallasVigentes.forEach(f => {
+          const n = f.n_est || 1;
+          for (let i = 1; i <= n; i++) {
+            filas.push({
+              evento: `${f.evento}${n > 1 ? String.fromCharCode(96 + i) : ''}`,
+              subsistema: f.subsistema,
+              componente: f.componente,
+              ttp: f.ttp / n,
+              repuestos: f.repuestos / n,
+              hh: f.hh / n
+            });
+          }
+        });
+      } else {
+        filas = JSON.parse(JSON.stringify(fallasVigentes));
+      }
+
+      // Cálculos por fila
+      let sumTTP = 0, sumRep = 0, sumHH = 0, sumCPar = 0, sumCMO = 0, sumCTot = 0;
+      const tbody = document.getElementById("tabla-fallas-body");
+      tbody.innerHTML = "";
+
+      filas.forEach((r, idx) => {
+        const cpar = r.ttp * cparada;
+        const cman = r.hh * cmo;
+        const ctot = cpar + r.repuestos + cman;
+
+        sumTTP += r.ttp;
+        sumRep += r.repuestos;
+        sumHH += r.hh;
+        sumCPar += cpar;
+        sumCMO += cman;
+        sumCTot += ctot;
+
+        const tr = document.createElement("tr");
+        tr.className = idx % 2 === 1 ? "bg-slate-900/60" : "bg-slate-900/20";
+        tr.innerHTML = `
+          <td class="p-3 text-center font-bold text-white">${r.evento}</td>
+          <td class="p-3 text-slate-400 font-sans">${r.subsistema}</td>
+          <td class="p-3 text-slate-300 font-sans">${r.componente}</td>
+          <td class="p-3 text-right text-slate-200">${r.ttp.toFixed(1)}</td>
+          <td class="p-3 text-right text-slate-200">$${Math.round(r.repuestos).toLocaleString()}</td>
+          <td class="p-3 text-right text-slate-200">${Math.round(r.hh)}</td>
+          <td class="p-3 text-right text-slate-300">$${Math.round(cpar).toLocaleString()}</td>
+          <td class="p-3 text-right text-slate-300">$${Math.round(cman).toLocaleString()}</td>
+          <td class="p-3 text-right font-bold text-rose-400">$${Math.round(ctot).toLocaleString()}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      // Fila de totales
+      document.getElementById("tabla-fallas-total").innerHTML = `
+        <td class="p-3 text-center">TOTAL</td>
+        <td class="p-3 font-sans" colspan="2">${filas.length} eventos evaluados</td>
+        <td class="p-3 text-right">${sumTTP.toFixed(1)} h</td>
+        <td class="p-3 text-right">$${Math.round(sumRep).toLocaleString()}</td>
+        <td class="p-3 text-right">${Math.round(sumHH)}</td>
+        <td class="p-3 text-right">$${Math.round(sumCPar).toLocaleString()}</td>
+        <td class="p-3 text-right">$${Math.round(sumCMO).toLocaleString()}</td>
+        <td class="p-3 text-right text-rose-400 text-sm">$${Math.round(sumCTot).toLocaleString()}</td>
+      `;
+
+      // KPIs
+      const nFall = filas.length;
+      const tfr = top - sumTTP;
+      const mtbf = nFall > 0 ? tfr / nFall : 0;
+      const mttr = nFall > 0 ? sumTTP / nFall : 0;
+      const ai = (mtbf + mttr) > 0 ? (mtbf / (mtbf + mttr)) * 100 : 0;
+      const ao = top > 0 ? (tfr / top) * 100 : 0;
+
+      // Actualizar DOM
+      document.getElementById("side-mtbf").innerText = `${mtbf.toFixed(1)} h`;
+      document.getElementById("side-mttr").innerText = `${mttr.toFixed(1)} h`;
+      document.getElementById("side-disp").innerText = `${ai.toFixed(2)}%`;
+      document.getElementById("side-costo").innerText = `$${Math.round(sumCTot).toLocaleString()}`;
+
+      document.getElementById("kpi-tfr").innerText = `${tfr.toLocaleString(undefined, {minimumFractionDigits: 1, maximumFractionDigits: 1})} h`;
+      document.getElementById("kpi-mtbf").innerText = `${mtbf.toFixed(1)} h`;
+      document.getElementById("kpi-mttr").innerText = `${mttr.toFixed(1)} h`;
+      document.getElementById("kpi-disp").innerText = `${ai.toFixed(2)}%`;
+
+      document.getElementById("doc-top").innerText = Math.round(top).toLocaleString();
+
+      // Recalcular Criticidad
+      recalcularCriticidad(conRep);
+
+      // Actualizar gráficos
+      actualizarGraficos(filas, sumCPar, sumRep, sumCMO);
+    }
+
+    function recalcularCriticidad(conRep) {
+      const matriz = [
+        { sub: "Unidad Motriz", f: conRep ? 3 : 3, s: 2, a: 1, o: 10, d: 4 },
+        { sub: "Banda y Rodillos", f: conRep ? 3 : 3, s: 2, a: 1, o: 10, d: 4 },
+        { sub: "Sistema de Tensión", f: conRep ? 2 : 2, s: 2, a: 2, o: 3, d: 1 },
+        { sub: "Estructura y Chasis", f: conRep ? 2 : 2, s: 1, a: 1, o: 3, d: 1 },
+        { sub: "Tablero y Control", f: 1, s: 2, a: 1, o: 3, d: 1 }
+      ];
+
+      const tbody = document.getElementById("tabla-criticidad-body");
+      tbody.innerHTML = "";
+
+      matriz.forEach(m => {
+        const ci = m.s + m.a + m.o + m.d;
+        const c = m.f * ci;
+        let clase = "Clase C - NO CRÍTICO";
+        let claseBadge = "bg-emerald-900/60 text-emerald-300 border-emerald-700/60";
+        let modelo = "Modelo Condicional / TPM";
+
+        if (c >= 15) {
+          clase = "Clase A - CRÍTICO";
+          claseBadge = "bg-rose-900/60 text-rose-300 border-rose-700/60";
+          modelo = "Alta Disponibilidad (CBM + Overhaul)";
+        } else if (c >= 10) {
+          clase = "Clase B - SEMICRÍTICO";
+          claseBadge = "bg-amber-900/60 text-amber-300 border-amber-700/60";
+          modelo = "Sistemático / Predictivo";
+        }
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td class="p-3 font-sans font-semibold text-white">${m.sub}</td>
+          <td class="p-3 text-center">${m.f}</td>
+          <td class="p-3 text-center">${m.s}</td>
+          <td class="p-3 text-center">${m.a}</td>
+          <td class="p-3 text-center">${m.o}</td>
+          <td class="p-3 text-center">${m.d}</td>
+          <td class="p-3 text-center font-bold text-slate-300">${ci}</td>
+          <td class="p-3 text-center font-extrabold text-white text-sm">${c}</td>
+          <td class="p-3 text-center">
+            <span class="px-2 py-0.5 rounded text-[11px] border font-sans font-semibold ${claseBadge}">${clase}</span>
+            <span class="block text-[10px] text-slate-400 font-sans mt-0.5">${modelo}</span>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function actualizarGraficos(filas, cpar, crep, cmo) {
+      // Destruir instancias previas
+      if (chartsInstanciados.pareto) chartsInstanciados.pareto.destroy();
+      if (chartsInstanciados.mttr) chartsInstanciados.mttr.destroy();
+      if (chartsInstanciados.donut) chartsInstanciados.donut.destroy();
+      if (chartsInstanciados.nowlan) chartsInstanciados.nowlan.destroy();
+
+      // G1: PARETO
+      const cparada = parseFloat(document.getElementById("inp-cparada").value) || 2500;
+      const cmoRate = parseFloat(document.getElementById("inp-cmo").value) || 25;
+      
+      let ordenados = filas.map(f => ({
+        evento: f.evento,
+        costo: f.ttp * cparada + f.repuestos + f.hh * cmoRate
+      })).sort((a, b) => b.costo - a.costo);
+
+      const totalCosto = ordenados.reduce((acc, v) => acc + v.costo, 0);
+      let acum = 0;
+      const pctAcum = ordenados.map(v => {
+        acum += v.costo;
+        return totalCosto > 0 ? (acum / totalCosto) * 100 : 0;
+      });
+
+      const ctxP = document.getElementById("chart-pareto").getContext("2d");
+      chartsInstanciados.pareto = new Chart(ctxP, {
+        type: 'bar',
+        data: {
+          labels: ordenados.map(o => o.evento),
+          datasets: [
+            {
+              label: '% Acumulado',
+              data: pctAcum,
+              type: 'line',
+              borderColor: '#f43f5e',
+              backgroundColor: '#f43f5e',
+              borderWidth: 2,
+              yAxisID: 'y1',
+              tension: 0.2
+            },
+            {
+              label: 'Costo Total (USD)',
+              data: ordenados.map(o => o.costo),
+              backgroundColor: '#3b82f6',
+              borderRadius: 6,
+              yAxisID: 'y'
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } },
+            y1: { position: 'right', min: 0, max: 100, grid: { display: false }, ticks: { color: '#f43f5e', callback: v => v + '%' } },
+            x: { ticks: { color: '#94a3b8' }, grid: { display: false } }
+          },
+          plugins: { legend: { labels: { color: '#f1f5f9', font: { size: 10 } } } }
+        }
+      });
+
+      // G2: MTTR
+      const ctxM = document.getElementById("chart-mttr").getContext("2d");
+      chartsInstanciados.mttr = new Chart(ctxM, {
+        type: 'bar',
+        data: {
+          labels: filas.map(f => f.evento),
+          datasets: [{
+            label: 'Tiempo Parada (h)',
+            data: filas.map(f => f.ttp),
+            backgroundColor: '#f59e0b',
+            borderRadius: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } },
+            x: { ticks: { color: '#94a3b8' }, grid: { display: false } }
+          },
+          plugins: { legend: { display: false } }
+        }
+      });
+
+      // G3: DONUT
+      const ctxD = document.getElementById("chart-donut").getContext("2d");
+      chartsInstanciados.donut = new Chart(ctxD, {
+        type: 'doughnut',
+        data: {
+          labels: ['Parada de Planta', 'Repuestos', 'Mano de Obra'],
+          datasets: [{
+            data: [cpar, crep, cmo],
+            backgroundColor: ['#ef4444', '#3b82f6', '#10b981'],
+            borderWidth: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'bottom', labels: { color: '#f1f5f9', font: { size: 10 } } }
+          },
+          cutout: '65%'
+        }
+      });
+
+      // G4: NOWLAN & HEAP SCATTER
+      const ctxN = document.getElementById("chart-nowlan").getContext("2d");
+      const horasOcurr = [1100, 2750, 4100, 5400, 6600];
+      chartsInstanciados.nowlan = new Chart(ctxN, {
+        type: 'scatter',
+        data: {
+          datasets: [{
+            label: 'Eventos de Falla (TOP 7,200 h)',
+            data: [
+              { x: 1100, y: 28 },
+              { x: 2750, y: 42 },
+              { x: 4100, y: 6 },
+              { x: 5400, y: 36 },
+              { x: 6600, y: 8 }
+            ],
+            backgroundColor: '#38bdf8',
+            pointRadius: 7,
+            pointHoverRadius: 9
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: { min: 0, max: 7500, title: { display: true, text: 'Horas del Año [h]', color: '#94a3b8' }, grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } },
+            y: { min: 0, max: 50, title: { display: true, text: 'TTP [h]', color: '#94a3b8' }, grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } }
+          },
+          plugins: { legend: { labels: { color: '#f1f5f9', font: { size: 10 } } } }
+        }
+      });
+    }
+
+    function cambiarPestana(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.getElementById(tabId).classList.remove('hidden');
+
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.className = "tab-btn px-3.5 py-2 rounded-xl font-medium transition text-slate-400 hover:text-slate-200 hover:bg-slate-800 flex items-center gap-1.5 whitespace-nowrap";
+      });
+      const activeBtn = document.getElementById(`btn-${tabId}`);
+      if (activeBtn) {
+        activeBtn.className = "tab-btn px-3.5 py-2 rounded-xl font-medium transition text-white bg-blue-600 shadow-sm flex items-center gap-1.5 whitespace-nowrap";
+      }
+
+      // Si es la pestaña de gráficos, redibujar para asegurar dimensiones
+      if (tabId === 'tab-dash') {
+        setTimeout(() => recalcularTodo(), 50);
+      }
+    }
+
+    function actualizarAlumno() {
+      const al = document.getElementById("inp-alumno").value || "Martín Méndez";
+      const leg = document.getElementById("inp-legajo").value || "UTN FRSR";
+      const an = document.getElementById("inp-anio").value || "2026";
+      document.getElementById("doc-alumno").innerText = al;
+      document.getElementById("doc-legajo").innerText = leg;
+      document.getElementById("doc-anio").innerText = an;
+    }
+
+    function restaurarValores() {
+      document.getElementById("inp-top").value = 7200;
+      document.getElementById("inp-cparada").value = 2500;
+      document.getElementById("inp-cmo").value = 25;
+      document.getElementById("toggle-rep").checked = false;
+      fallasVigentes = JSON.parse(JSON.stringify(FALLAS_BASE));
+      recalcularTodo();
+    }
+
+    function restaurarFallas() {
+      fallasVigentes = JSON.parse(JSON.stringify(FALLAS_BASE));
+      recalcularTodo();
+    }
+
+    // Inicialización al cargar la ventana
+    window.addEventListener("DOMContentLoaded", () => {
+      recalcularTodo();
+      actualizarAlumno();
+      if (window.renderMathInElement) {
+        renderMathInElement(document.body, {
+          delimiters: [
+            {left: '$$', right: '$$', display: true},
+            {left: '\\[', right: '\\]', display: true},
+            {left: '\\(', right: '\\)', display: false},
+            {left: '$', right: '$', display: false}
+          ]
+        });
+      }
+    });
+  </script>
+
+</body>
+</html>
