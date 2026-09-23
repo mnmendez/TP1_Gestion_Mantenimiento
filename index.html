@@ -431,63 +431,466 @@
             </div>
           </div>
 
-          <!-- ÁRBOL JERÁRQUICO -->
-          <div class="space-y-3 font-mono text-xs bg-slate-950 p-5 rounded-xl border border-slate-800/80">
-            <div class="flex items-center gap-2 text-slate-400">
-              <span class="px-2 py-0.5 rounded bg-slate-800 text-[10px] text-slate-300 font-sans">Nivel 2</span>
-              <span class="text-slate-200 font-semibold font-sans">Complejo Industrial:</span> Planta de Procesamiento de Minerales / Áridos
+          <!-- ÁRBOL JERÁRQUICO COMPLETO A 6 NIVELES -->
+          <div class="space-y-4 font-mono text-xs bg-slate-950 p-5 rounded-xl border border-slate-800/80">
+            
+            <!-- NIVEL 2: PLANTA / COMPLEJO INDUSTRIAL -->
+            <div class="flex items-center gap-2 text-slate-300">
+              <span class="px-2 py-0.5 rounded bg-slate-800 text-[10px] text-slate-200 font-sans font-bold border border-slate-700">Nivel 2 · Instalación</span>
+              <span class="text-white font-bold font-sans">Complejo Industrial Minero:</span> Planta de Clasificación y Procesamiento de Áridos de Alta Densidad
             </div>
-            <div class="ml-4 pl-3 border-l-2 border-slate-800 space-y-3">
-              <div class="flex items-center gap-2 text-slate-400">
-                <span class="px-2 py-0.5 rounded bg-slate-800 text-[10px] text-slate-300 font-sans">Nivel 3</span>
-                <span class="text-slate-200 font-semibold font-sans">Área Operativa:</span> Sección de Elevación, Transporte y Molienda Primaria
+
+            <div class="ml-3 sm:ml-5 pl-3 sm:pl-4 border-l-2 border-slate-800 space-y-4">
+              
+              <!-- NIVEL 3: ÁREA OPERATIVA -->
+              <div class="flex items-center gap-2 text-slate-300">
+                <span class="px-2 py-0.5 rounded bg-slate-800 text-[10px] text-blue-300 font-sans font-bold border border-slate-700">Nivel 3 · Sección</span>
+                <span class="text-blue-200 font-bold font-sans">Área Operativa:</span> Sección de Elevación Continua, Acopio y Molienda Primaria (Circuito Continuo 7,200 h/año)
               </div>
-              <div class="ml-4 pl-3 border-l-2 border-slate-800 space-y-3">
+
+              <div class="ml-3 sm:ml-5 pl-3 sm:pl-4 border-l-2 border-slate-800 space-y-4">
+                
+                <!-- NIVEL 4: EQUIPO / UNIDAD DE PROCESO -->
                 <div class="flex items-center gap-2 text-blue-400">
-                  <span class="px-2 py-0.5 rounded bg-blue-900/60 text-[10px] text-blue-300 font-sans">Nivel 4</span>
-                  <span class="text-blue-200 font-semibold font-sans">Unidad de Proceso / Equipo:</span> Cinta Transportadora Principal (CV-01)
+                  <span class="px-2 py-0.5 rounded bg-blue-900/60 text-[10px] text-blue-200 font-sans font-bold border border-blue-700/60">Nivel 4 · Unidad de Equipo</span>
+                  <span class="text-blue-100 font-extrabold font-sans">Cinta Transportadora Principal de Áridos (TAG: CV-01)</span>
                 </div>
-                <div class="ml-4 pl-3 border-l-2 border-blue-900/40 space-y-3">
-                  <!-- SUBSISTEMAS -->
-                  <div class="p-3 bg-slate-900/80 rounded-lg border border-slate-800">
-                    <span class="px-2 py-0.5 rounded bg-rose-900/50 text-[10px] text-rose-300 font-sans font-bold">Nivel 5 · SYS-MOT</span>
-                    <span class="font-sans font-semibold text-white ml-2">Unidad Motriz y Accionamiento</span>
-                    <p class="text-slate-400 font-sans text-xs mt-1">Motor asincrónico trifásico 55 kW, Reductor ortogonal de 3 etapas i=28:1, Arrancador suave electrónico.</p>
+
+                <div class="ml-3 sm:ml-5 pl-3 sm:pl-4 border-l-2 border-blue-900/50 space-y-4">
+                  
+                  <!-- ======================================================= -->
+                  <!-- SUBSISTEMA 1: SYS-MOT -->
+                  <!-- ======================================================= -->
+                  <div class="p-3.5 bg-slate-900/90 rounded-xl border border-rose-900/40 space-y-2">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-1.5">
+                      <div class="flex items-center gap-2">
+                        <span class="px-2 py-0.5 rounded bg-rose-900/60 text-[10px] text-rose-200 font-sans font-bold">Nivel 5 · SYS-MOT</span>
+                        <span class="font-sans font-bold text-white text-sm">Unidad Motriz y Cadena Cinemática de Accionamiento</span>
+                      </div>
+                      <span class="text-[10px] text-rose-400 font-mono bg-rose-950/60 px-2 py-0.5 rounded border border-rose-800/40">Crítico · Clase A (C=51)</span>
+                    </div>
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-2.5 pt-1">
+                      <!-- Elemento 1 -->
+                      <div class="p-2.5 rounded-lg bg-slate-950 border border-slate-800">
+                        <span class="text-blue-300 font-sans font-semibold text-[11px] block">Elemento: Motor Asincrónico 55 kW</span>
+                        <span class="text-slate-400 text-[10px] block mb-1">Trifásico 380/660 V, 1475 RPM, IP55, Clase F, B3</span>
+                        <ul class="text-[10px] text-slate-300 space-y-0.5 list-disc list-inside font-sans">
+                          <li><strong>Partes:</strong> Devanado estatórico clase F impregnado</li>
+                          <li>Rodamientos de bolas 6312-2Z (lado acople y libre)</li>
+                          <li>Ventilador de plástico y tobera con rejilla exterior</li>
+                          <li>Caja de bornes y puente de conexión estrella-triángulo</li>
+                        </ul>
+                      </div>
+                      <!-- Elemento 2 -->
+                      <div class="p-2.5 rounded-lg bg-slate-950 border border-slate-800">
+                        <span class="text-blue-300 font-sans font-semibold text-[11px] block">Elemento: Reductor Ortogonal 3 Etapas</span>
+                        <span class="text-slate-400 text-[10px] block mb-1">Relación i=28:1, lubricado con aceite sintético ISO VG 220</span>
+                        <ul class="text-[10px] text-slate-300 space-y-0.5 list-disc list-inside font-sans">
+                          <li><strong>Partes:</strong> Piñón cónico y corona espiral cementados</li>
+                          <li>Tren de engranajes cilíndricos de dientes helicoidales</li>
+                          <li>Retenes de labio radial en elastómero de Vitón</li>
+                          <li>Tapón de purga magnético y visor de nivel de aceite</li>
+                        </ul>
+                      </div>
+                      <!-- Elemento 3 -->
+                      <div class="p-2.5 rounded-lg bg-slate-950 border border-slate-800">
+                        <span class="text-blue-300 font-sans font-semibold text-[11px] block">Elemento: Acoplamiento Elástico de Eje</span>
+                        <span class="text-slate-400 text-[10px] block mb-1">Manguito de garras partido para absorción de desalineación</span>
+                        <ul class="text-[10px] text-slate-300 space-y-0.5 list-disc list-inside font-sans">
+                          <li><strong>Partes:</strong> Tacos elásticos en estrella de uretano 92 ShA</li>
+                          <li>Cubos de fundición nodular mecanizados</li>
+                          <li>Pernos pasantes grado 8.8 con tuerca autofrenante</li>
+                        </ul>
+                      </div>
+                    </div>
                   </div>
-                  <div class="p-3 bg-slate-900/80 rounded-lg border border-slate-800">
-                    <span class="px-2 py-0.5 rounded bg-rose-900/50 text-[10px] text-rose-300 font-sans font-bold">Nivel 5 · SYS-BAN</span>
-                    <span class="font-sans font-semibold text-white ml-2">Banda Continua y Rodillos de Apoyo</span>
-                    <p class="text-slate-400 font-sans text-xs mt-1">Cinta multicapa de alta resistencia, tambor motriz Ø500mm con cerámico, tambor de reenvío, estaciones de rodillos.</p>
+
+                  <!-- ======================================================= -->
+                  <!-- SUBSISTEMA 2: SYS-BAN -->
+                  <!-- ======================================================= -->
+                  <div class="p-3.5 bg-slate-900/90 rounded-xl border border-rose-900/40 space-y-2">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-1.5">
+                      <div class="flex items-center gap-2">
+                        <span class="px-2 py-0.5 rounded bg-rose-900/60 text-[10px] text-rose-200 font-sans font-bold">Nivel 5 · SYS-BAN</span>
+                        <span class="font-sans font-bold text-white text-sm">Banda Transportadora Continua y Tren de Rodillos</span>
+                      </div>
+                      <span class="text-[10px] text-rose-400 font-mono bg-rose-950/60 px-2 py-0.5 rounded border border-rose-800/40">Crítico · Clase A (C=51)</span>
+                    </div>
+                    <div class="grid grid-cols-1 lg:grid-cols-4 gap-2.5 pt-1">
+                      <!-- Elemento 1 -->
+                      <div class="p-2.5 rounded-lg bg-slate-950 border border-slate-800">
+                        <span class="text-blue-300 font-sans font-semibold text-[11px] block">Elemento: Tambor Motriz Ø500</span>
+                        <span class="text-slate-400 text-[10px] block mb-1">Engomado cerámico con rombos antideslizantes</span>
+                        <ul class="text-[10px] text-slate-300 space-y-0.5 list-disc list-inside font-sans">
+                          <li><strong>Partes:</strong> Eje escalonado torneado de acero SAE 1045</li>
+                          <li>Rodamientos oscilantes SKF 22220 EK (C3)</li>
+                          <li>Manguito cónico de fijación H 320 y tuerca KM</li>
+                          <li>Soportes monobloc SNH 520 con sellos taconite</li>
+                        </ul>
+                      </div>
+                      <!-- Elemento 2 -->
+                      <div class="p-2.5 rounded-lg bg-slate-950 border border-slate-800">
+                        <span class="text-blue-300 font-sans font-semibold text-[11px] block">Elemento: Tambor de Cola Ø400</span>
+                        <span class="text-slate-400 text-[10px] block mb-1">Cilíndrico autolimpiante con espirales divergentes</span>
+                        <ul class="text-[10px] text-slate-300 space-y-0.5 list-disc list-inside font-sans">
+                          <li><strong>Partes:</strong> Eje macizo en apoyos oscilantes autocentrantes</li>
+                          <li>Rodamientos de rodillos a rótula SKF 22216 EK</li>
+                          <li>Sellos laberínticos con engrasador exterior</li>
+                        </ul>
+                      </div>
+                      <!-- Elemento 3 -->
+                      <div class="p-2.5 rounded-lg bg-slate-950 border border-slate-800">
+                        <span class="text-blue-300 font-sans font-semibold text-[11px] block">Elemento: Estaciones de Rodillos</span>
+                        <span class="text-slate-400 text-[10px] block mb-1">Ternas en artesa 35° (carga) y planos (retorno)</span>
+                        <ul class="text-[10px] text-slate-300 space-y-0.5 list-disc list-inside font-sans">
+                          <li><strong>Partes:</strong> Tubos cilíndricos de acero Ø108x4 mm</li>
+                          <li>Rodamientos rígidos 6204-2RS lubricados de por vida</li>
+                          <li>Sellos laberínticos triples de nylon anti-polvo</li>
+                        </ul>
+                      </div>
+                      <!-- Elemento 4 -->
+                      <div class="p-2.5 rounded-lg bg-slate-950 border border-slate-800">
+                        <span class="text-blue-300 font-sans font-semibold text-[11px] block">Elemento: Banda Multicapa EP 630/4</span>
+                        <span class="text-slate-400 text-[10px] block mb-1">Ancho 800 mm, 4 telas poliéster/poliamida</span>
+                        <ul class="text-[10px] text-slate-300 space-y-0.5 list-disc list-inside font-sans">
+                          <li><strong>Partes:</strong> Cubierta superior antiabrasiva (5 mm DIN X)</li>
+                          <li>Carcasa textil de alta tenacidad resistente a corte</li>
+                          <li>Empalme vulcanizado escalonado en caliente</li>
+                        </ul>
+                      </div>
+                    </div>
                   </div>
-                  <div class="p-3 bg-slate-900/80 rounded-lg border border-slate-800">
-                    <span class="px-2 py-0.5 rounded bg-amber-900/50 text-[10px] text-amber-300 font-sans font-bold">Nivel 5 · SYS-TEN</span>
-                    <span class="font-sans font-semibold text-white ml-2">Sistema Oleohidráulico de Tensión Automática</span>
-                    <p class="text-slate-400 font-sans text-xs mt-1">Centralita con bomba de engranajes (20 bar), cilindro hidráulico de doble efecto, latiguillos y presostatos.</p>
+
+                  <!-- ======================================================= -->
+                  <!-- SUBSISTEMA 3: SYS-TEN -->
+                  <!-- ======================================================= -->
+                  <div class="p-3.5 bg-slate-900/90 rounded-xl border border-amber-900/40 space-y-2">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-1.5">
+                      <div class="flex items-center gap-2">
+                        <span class="px-2 py-0.5 rounded bg-amber-900/60 text-[10px] text-amber-200 font-sans font-bold">Nivel 5 · SYS-TEN</span>
+                        <span class="font-sans font-bold text-white text-sm">Sistema Oleohidráulico de Tensión Dinámica Automática</span>
+                      </div>
+                      <span class="text-[10px] text-amber-400 font-mono bg-amber-950/60 px-2 py-0.5 rounded border border-amber-800/40">Semicrítico · Clase B / A (C=16)</span>
+                    </div>
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-2.5 pt-1">
+                      <!-- Elemento 1 -->
+                      <div class="p-2.5 rounded-lg bg-slate-950 border border-slate-800">
+                        <span class="text-blue-300 font-sans font-semibold text-[11px] block">Elemento: Central Hidráulica (Power Pack)</span>
+                        <span class="text-slate-400 text-[10px] block mb-1">Depósito 40 L con motobomba y valvulería de seguridad</span>
+                        <ul class="text-[10px] text-slate-300 space-y-0.5 list-disc list-inside font-sans">
+                          <li><strong>Partes:</strong> Bomba volumétrica de engranajes (4 cm³/rev)</li>
+                          <li>Motor eléctrico trifásico auxiliar de 1.5 kW</li>
+                          <li>Válvula limitadora de presión regulada a 20 bar</li>
+                          <li>Filtro de retorno de 10 µm con indicador colmatación</li>
+                        </ul>
+                      </div>
+                      <!-- Elemento 2 -->
+                      <div class="p-2.5 rounded-lg bg-slate-950 border border-slate-800">
+                        <span class="text-blue-300 font-sans font-semibold text-[11px] block">Elemento: Cilindro de Doble Efecto</span>
+                        <span class="text-slate-400 text-[10px] block mb-1">Carrera 800 mm sobre carro tensor móvil de tambor de cola</span>
+                        <ul class="text-[10px] text-slate-300 space-y-0.5 list-disc list-inside font-sans">
+                          <li><strong>Partes:</strong> Vástago de acero rectificado y cromado Ø45 mm</li>
+                          <li>Juego de empaquetaduras y rascador de poliuretano</li>
+                          <li>Rótulas de anclaje mecánicas autoalineables</li>
+                        </ul>
+                      </div>
+                      <!-- Elemento 3 -->
+                      <div class="p-2.5 rounded-lg bg-slate-950 border border-slate-800">
+                        <span class="text-blue-300 font-sans font-semibold text-[11px] block">Elemento: Línea de Distribución Hidráulica</span>
+                        <span class="text-slate-400 text-[10px] block mb-1">Mangueras flexibles y control presostático</span>
+                        <ul class="text-[10px] text-slate-300 space-y-0.5 list-disc list-inside font-sans">
+                          <li><strong>Partes:</strong> Latiguillo de alta presión 2SN doble malla acero</li>
+                          <li>Terminales prensados rosca BSP con asiento cónico</li>
+                          <li>Presostato de corte por mínima presión (&lt; 15 bar)</li>
+                        </ul>
+                      </div>
+                    </div>
                   </div>
-                  <div class="p-3 bg-slate-900/80 rounded-lg border border-slate-800">
-                    <span class="px-2 py-0.5 rounded bg-emerald-900/50 text-[10px] text-emerald-300 font-sans font-bold">Nivel 5 · SYS-EST</span>
-                    <span class="font-sans font-semibold text-white ml-2">Estructura, Chasis y Limpieza</span>
-                    <p class="text-slate-400 font-sans text-xs mt-1">Bastidor metálico, tolva de descarga, rascador primario de uretano y secundario de metal duro.</p>
+
+                  <!-- ======================================================= -->
+                  <!-- SUBSISTEMA 4: SYS-EST -->
+                  <!-- ======================================================= -->
+                  <div class="p-3.5 bg-slate-900/90 rounded-xl border border-emerald-900/40 space-y-2">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-1.5">
+                      <div class="flex items-center gap-2">
+                        <span class="px-2 py-0.5 rounded bg-emerald-900/60 text-[10px] text-emerald-200 font-sans font-bold">Nivel 5 · SYS-EST</span>
+                        <span class="font-sans font-bold text-white text-sm">Estructura Metálica, Bastidor y Sistemas de Limpieza</span>
+                      </div>
+                      <span class="text-[10px] text-emerald-400 font-mono bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-800/40">Semicrítico · Clase B (C=12)</span>
+                    </div>
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-2.5 pt-1">
+                      <!-- Elemento 1 -->
+                      <div class="p-2.5 rounded-lg bg-slate-950 border border-slate-800">
+                        <span class="text-blue-300 font-sans font-semibold text-[11px] block">Elemento: Bastidor y Tolva de Carga</span>
+                        <span class="text-slate-400 text-[10px] block mb-1">Perfiles de acero laminado electro-soldado con anclaje</span>
+                        <ul class="text-[10px] text-slate-300 space-y-0.5 list-disc list-inside font-sans">
+                          <li><strong>Partes:</strong> Largueros estructurales UPN 200 arriostrados</li>
+                          <li>Placas de anclaje químico a fundaciones de hormigón</li>
+                          <li>Chapas de desgaste (liners) antidesgaste Hardox 450</li>
+                        </ul>
+                      </div>
+                      <!-- Elemento 2 -->
+                      <div class="p-2.5 rounded-lg bg-slate-950 border border-slate-800">
+                        <span class="text-blue-300 font-sans font-semibold text-[11px] block">Elemento: Rascador Primario Frontal</span>
+                        <span class="text-slate-400 text-[10px] block mb-1">Contacto directo sobre el tambor motriz de descarga</span>
+                        <ul class="text-[10px] text-slate-300 space-y-0.5 list-disc list-inside font-sans">
+                          <li><strong>Partes:</strong> Lámina / cuchilla de poliuretano 85 Shore A</li>
+                          <li>Brazo soporte basculante con resorte de torsión</li>
+                          <li>Tornillos tensores micrométricos de aproximación</li>
+                        </ul>
+                      </div>
+                      <!-- Elemento 3 -->
+                      <div class="p-2.5 rounded-lg bg-slate-950 border border-slate-800">
+                        <span class="text-blue-300 font-sans font-semibold text-[11px] block">Elemento: Rascador Secundario e Inferior</span>
+                        <span class="text-slate-400 text-[10px] block mb-1">Rascado en retorno y quitapiedras en V de protección</span>
+                        <ul class="text-[10px] text-slate-300 space-y-0.5 list-disc list-inside font-sans">
+                          <li><strong>Partes:</strong> Pastillas de carburo de tungsteno (metal duro)</li>
+                          <li>Amortiguadores elastoméricos de torsión en fijación</li>
+                          <li>Arado deflector en V para expulsar terrones caídos</li>
+                        </ul>
+                      </div>
+                    </div>
                   </div>
-                  <div class="p-3 bg-slate-900/80 rounded-lg border border-slate-800">
-                    <span class="px-2 py-0.5 rounded bg-emerald-900/50 text-[10px] text-emerald-300 font-sans font-bold">Nivel 5 · SYS-ELE</span>
-                    <span class="font-sans font-semibold text-white ml-2">Control, Instrumentación y Seguridad</span>
-                    <p class="text-slate-400 font-sans text-xs mt-1">Sensores inductivos de desalineación, cables tiradores de emergencia e interbloqueo con reactor.</p>
+
+                  <!-- ======================================================= -->
+                  <!-- SUBSISTEMA 5: SYS-ELE -->
+                  <!-- ======================================================= -->
+                  <div class="p-3.5 bg-slate-900/90 rounded-xl border border-emerald-900/40 space-y-2">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-1.5">
+                      <div class="flex items-center gap-2">
+                        <span class="px-2 py-0.5 rounded bg-emerald-900/60 text-[10px] text-emerald-200 font-sans font-bold">Nivel 5 · SYS-ELE</span>
+                        <span class="font-sans font-bold text-white text-sm">Control Eléctrico, Automatización e Interbloqueos de Seguridad</span>
+                      </div>
+                      <span class="text-[10px] text-emerald-400 font-mono bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-800/40">No Crítico · Clase C (C=7)</span>
+                    </div>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-2.5 pt-1">
+                      <!-- Elemento 1 -->
+                      <div class="p-2.5 rounded-lg bg-slate-950 border border-slate-800">
+                        <span class="text-blue-300 font-sans font-semibold text-[11px] block">Elemento: Tablero Eléctrico de Fuerza (CCM)</span>
+                        <span class="text-slate-400 text-[10px] block mb-1">Gabinete metálico IP54 con maniobra y protecciones</span>
+                        <ul class="text-[10px] text-slate-300 space-y-0.5 list-disc list-inside font-sans">
+                          <li><strong>Partes:</strong> Arrancador suave electrónico con bypass de contactor</li>
+                          <li>Relé térmico bimetálico y disyuntor motor magnetotérmico</li>
+                          <li>Fusibles ultrarrápidos tipo gR para semiconductores</li>
+                          <li>Transformador de mando y maniobra 380/24 Vca</li>
+                        </ul>
+                      </div>
+                      <!-- Elemento 2 -->
+                      <div class="p-2.5 rounded-lg bg-slate-950 border border-slate-800">
+                        <span class="text-blue-300 font-sans font-semibold text-[11px] block">Elemento: Sensores de Campo y Protección</span>
+                        <span class="text-slate-400 text-[10px] block mb-1">Dispositivos cableados en serie con el lazo de parada de emergencia</span>
+                        <ul class="text-[10px] text-slate-300 space-y-0.5 list-disc list-inside font-sans">
+                          <li><strong>Partes:</strong> Interruptores de desalineación lateral de palanca</li>
+                          <li>Cables tiradores de parada de emergencia bi-laterales con traba</li>
+                          <li>Sensor inductivo detector de rotación/subvelocidad en cola</li>
+                          <li>Lazo de interbloqueo cableado al reactor químico receptor</li>
+                        </ul>
+                      </div>
+                    </div>
                   </div>
+
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- LLAMADA: REEMPLAZO VS REPARACIÓN -->
-          <div class="mt-6 p-4 rounded-xl bg-blue-950/40 border border-blue-800/50 flex items-start gap-3">
-            <span class="text-xl">💡</span>
-            <div class="text-xs space-y-1">
-              <h3 class="font-bold text-blue-300 uppercase tracking-wide">Criterio ISO 14224: Reemplazo (MTTF) vs. Reparación (MTBF)</h3>
-              <p class="text-slate-300 leading-relaxed">
-                • <strong>Nivel de Reemplazo (Nivel 6 y 8):</strong> Componentes unitarios indivisibles no reparables (rodamientos oscilantes SKF, latiguillos hidráulicos, labios de rascadores de uretano, retenes). Se gestionan bajo la métrica <strong>MTTF (Mean Time To Failure)</strong>.<br>
-                • <strong>Nivel de Reparación (Nivel 4 y 5):</strong> Sistemas y equipos complejos mantenibles (motor eléctrico, reductor ortogonal, central hidráulica, cinta transportadora completa). Se gestionan bajo la métrica <strong>MTBF (Mean Time Between Failures)</strong>.
-              </p>
+          <!-- =============================================================== -->
+          <!-- CUADRO COMPARATIVO: GUÍA DEL TP VS. NORMA ISO 14224 -->
+          <!-- =============================================================== -->
+          <div class="mt-6 p-5 rounded-xl bg-slate-900/90 border border-blue-900/50 space-y-3">
+            <div class="flex items-center gap-2">
+              <span class="text-lg">⚖️</span>
+              <h3 class="font-bold text-blue-300 uppercase tracking-wide text-xs">
+                Auditoría Técnica: Taxonomía Literal del TP N°1 vs. Jerarquía Formal ISO 14224 (Cláusula 6.2)
+              </h3>
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              Durante la defensa oral y la presentación escrita del trabajo, es mandatorio fundamentar la correlación entre los niveles solicitados por el enunciado académico y la norma internacional <strong>ISO 14224:2016</strong> (<em>Petroleum, petrochemical and natural gas industries — Collection and exchange of reliability and maintenance data for equipment</em>):
+            </p>
+            <div class="overflow-x-auto rounded-lg border border-slate-800">
+              <table class="w-full text-left text-xs font-mono">
+                <thead class="bg-slate-800 text-slate-200">
+                  <tr>
+                    <th class="p-2.5 text-center">Nivel ISO 14224</th>
+                    <th class="p-2.5">Denominación Formal ISO 14224</th>
+                    <th class="p-2.5">Término en Enunciado TP</th>
+                    <th class="p-2.5">Instancia en Transportador CV-01</th>
+                    <th class="p-2.5">Observación de Cátedra & Homologación</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800 text-slate-300">
+                  <tr>
+                    <td class="p-2 text-center text-blue-400 font-bold">Nivel 2</td>
+                    <td class="p-2 font-sans font-semibold text-white">Business Category / Installation</td>
+                    <td class="p-2 font-sans">Complejo / Planta</td>
+                    <td class="p-2">Planta de Tratamiento de Áridos</td>
+                    <td class="p-2 font-sans text-slate-400">Coincidencia total. Marco corporativo de operación.</td>
+                  </tr>
+                  <tr>
+                    <td class="p-2 text-center text-blue-400 font-bold">Nivel 3</td>
+                    <td class="p-2 font-sans font-semibold text-white">Plant / Section</td>
+                    <td class="p-2 font-sans">Área Operativa</td>
+                    <td class="p-2">Línea de Elevación y Molienda</td>
+                    <td class="p-2 font-sans text-slate-400">Coincidencia total. Área de proceso continuo aguas arriba de reactores.</td>
+                  </tr>
+                  <tr>
+                    <td class="p-2 text-center text-blue-400 font-bold">Nivel 4 / 5</td>
+                    <td class="p-2 font-sans font-semibold text-white">Equipment Unit (Nivel 5 en ISO estricta)</td>
+                    <td class="p-2 font-sans">Equipo</td>
+                    <td class="p-2 font-bold text-white">Cinta Transportadora CV-01</td>
+                    <td class="p-2 font-sans text-slate-400">La ISO ubica el equipo en N5 si clasifica N1 como Industria. El TP lo toma como N4.</td>
+                  </tr>
+                  <tr>
+                    <td class="p-2 text-center text-blue-400 font-bold">Nivel 6</td>
+                    <td class="p-2 font-sans font-semibold text-white">Subunit (Subunidad / Subsistema)</td>
+                    <td class="p-2 font-sans">Sistema / Subsistema</td>
+                    <td class="p-2">SYS-MOT, SYS-BAN, SYS-TEN, etc.</td>
+                    <td class="p-2 font-sans text-slate-400">Coincidencia funcional. Conjuntos que cumplen una función técnica primaria.</td>
+                  </tr>
+                  <tr class="bg-amber-950/20">
+                    <td class="p-2 text-center text-amber-400 font-bold">Nivel 7</td>
+                    <td class="p-2 font-sans font-semibold text-amber-200">Maintainable Item (Ítem Mantenible)</td>
+                    <td class="p-2 font-sans text-amber-200 font-bold">Elemento (TP)</td>
+                    <td class="p-2 text-white">Motor 55 kW, Reductor, Tambor, Centralita</td>
+                    <td class="p-2 font-sans text-amber-300">
+                      <strong>Discrepancia léxica:</strong> La ISO llama <em>Componente / Ítem Mantenible</em> al ensamble complejo reparable; el TP lo designa como <em>Elemento</em>.
+                    </td>
+                  </tr>
+                  <tr class="bg-amber-950/20">
+                    <td class="p-2 text-center text-amber-400 font-bold">Nivel 8</td>
+                    <td class="p-2 font-sans font-semibold text-amber-200">Part (Parte Indivisible)</td>
+                    <td class="p-2 font-sans text-amber-200 font-bold">Componente (TP)</td>
+                    <td class="p-2 text-white">Rodamiento SKF, Latiguillo, Retén, Lámina</td>
+                    <td class="p-2 font-sans text-amber-300">
+                      <strong>Discrepancia léxica:</strong> La ISO llama <em>Parte</em> a la pieza atómica desechable; el TP la designa como <em>Componente</em>.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="text-[11px] text-slate-400 italic">
+              <strong>Conclusión conceptual:</strong> Más allá de la inversión de términos entre Nivel 7 y Nivel 8, la estructura jerárquica cumple con el principio de desagregación unívoca: aislar funciones para imputar costos, modos de falla e inventarios en el CMMS/GMAO sin ambigüedad.
+            </p>
+          </div>
+
+          <!-- =============================================================== -->
+          <!-- MATRIZ DETALLADA DE DECISIÓN: REEMPLAZO VS REPARACIÓN -->
+          <!-- =============================================================== -->
+          <div class="mt-6 p-5 rounded-xl bg-slate-900/90 border border-slate-800 space-y-4">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="text-lg">⚙️</span>
+                <h3 class="font-bold text-white uppercase tracking-wide text-xs">
+                  Criterio de Decisión: Reemplazo (MTTF) vs. Reparación (MTBF) y Regla LCC
+                </h3>
+              </div>
+              <span class="text-[10px] text-blue-400 font-mono bg-blue-950 px-2 py-0.5 rounded border border-blue-800">ISO 14224 & RCM Standard</span>
+            </div>
+
+            <!-- Principios rectores -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+              <div class="p-3 rounded-lg bg-slate-950 border border-slate-800 space-y-1">
+                <span class="font-bold text-blue-400 uppercase text-[11px] block">1. Reparabilidad Intrínseca</span>
+                <p class="text-slate-300 text-[11px] leading-relaxed">
+                  Distingue si el elemento puede restaurarse a su condición funcional original sin alterar tolerancias metalúrgicas. Los rodamientos o sellos elastoméricos pierden su geometría al desmontarse, por lo que son <strong>intrínsecamente no reparables</strong>.
+                </p>
+              </div>
+              <div class="p-3 rounded-lg bg-slate-950 border border-slate-800 space-y-1">
+                <span class="font-bold text-emerald-400 uppercase text-[11px] block">2. Criterio Económico LCC (60%-70%)</span>
+                <p class="text-slate-300 text-[11px] leading-relaxed">
+                  Si el costo de reparación más mano de obra y riesgo de parada (\(C_{\text{rep}} + C_{\text{HH}}\)) supera el <strong>65% del costo de adquisición de un conjunto nuevo con garantía</strong>, se descarta la reparación y se ejecuta reemplazo integral.
+                </p>
+              </div>
+              <div class="p-3 rounded-lg bg-slate-950 border border-slate-800 space-y-1">
+                <span class="font-bold text-amber-400 uppercase text-[11px] block">3. Modelado: MTBF vs. MTTF</span>
+                <p class="text-slate-300 text-[11px] leading-relaxed">
+                  • <strong>MTBF (Mean Time Between Failures):</strong> Para ítems reparables con múltiples renovaciones operativas.<br>
+                  • <strong>MTTF (Mean Time To Failure):</strong> Para componentes descartables con un único ciclo de vida hasta su desecho definitivo.
+                </p>
+              </div>
+            </div>
+
+            <!-- Tabla de Aplicación Práctica en CV-01 -->
+            <div class="overflow-x-auto rounded-lg border border-slate-800 pt-1">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-slate-800 text-slate-200 font-mono">
+                  <tr>
+                    <th class="p-2.5">Ítem del Activo CV-01</th>
+                    <th class="p-2.5 text-center">Nivel</th>
+                    <th class="p-2.5 text-center">Decisión Estratégica</th>
+                    <th class="p-2.5 text-center">Métrica KPI</th>
+                    <th class="p-2.5">Justificación Técnico-Económica (LCC y Confiabilidad)</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800 font-sans text-slate-300 text-[11px]">
+                  <tr>
+                    <td class="p-2.5 font-bold text-white">Rodamiento oscilante SKF 22220 EK</td>
+                    <td class="p-2.5 text-center font-mono text-slate-400">Parte / N8</td>
+                    <td class="p-2.5 text-center">
+                      <span class="px-2 py-0.5 rounded bg-rose-900/50 text-rose-300 font-bold font-mono text-[10px]">REEMPLAZO</span>
+                    </td>
+                    <td class="p-2.5 text-center font-mono font-bold text-blue-300">MTTF</td>
+                    <td class="p-2.5 leading-relaxed text-slate-300">
+                      Componente unitario con pistas y rodillos templados de ultraprecisión. Ante desconchado (spalling) es imposible rectificar in-situ. El costo del rodamiento nuevo ($1,850 USD) es despreciable frente al riesgo de destrucción catastrófica del tambor.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="p-2.5 font-bold text-white">Motor Eléctrico Asincrónico 55 kW</td>
+                    <td class="p-2.5 text-center font-mono text-slate-400">Ítem / N7</td>
+                    <td class="p-2.5 text-center">
+                      <span class="px-2 py-0.5 rounded bg-blue-900/50 text-blue-300 font-bold font-mono text-[10px]">REPARACIÓN / OVERHAUL</span>
+                    </td>
+                    <td class="p-2.5 text-center font-mono font-bold text-blue-300">MTBF</td>
+                    <td class="p-2.5 leading-relaxed text-slate-300">
+                      Conjunto electromecánico noble. Ante cortocircuito estatórico se rebobina con aislamiento clase H ($3,400 USD vs $12,000 USD de motor nuevo: ~28% LCC). Estratégicamente se reemplaza de inmediato por el <strong>Motor Standby</strong> (MTTR 4 h) y el averiado se repara en taller.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="p-2.5 font-bold text-white">Reductor Ortogonal Helicoidal 3 Etapas</td>
+                    <td class="p-2.5 text-center font-mono text-slate-400">Ítem / N7</td>
+                    <td class="p-2.5 text-center">
+                      <span class="px-2 py-0.5 rounded bg-blue-900/50 text-blue-300 font-bold font-mono text-[10px]">REPARACIÓN</span>
+                    </td>
+                    <td class="p-2.5 text-center font-mono font-bold text-blue-300">MTBF</td>
+                    <td class="p-2.5 leading-relaxed text-slate-300">
+                      Carcasa fundida y ejes de alto costo de reposición. Se interviene reemplazando retenes de vitón, rodamientos cónicos y aceite ISO VG 220, ajustando huelgo entre dientes sin desechar el activo.
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="p-2.5 font-bold text-white">Latiguillo Oleohidráulico 20 bar</td>
+                    <td class="p-2.5 text-center font-mono text-slate-400">Parte / N8</td>
+                    <td class="p-2.5 text-center">
+                      <span class="px-2 py-0.5 rounded bg-rose-900/50 text-rose-300 font-bold font-mono text-[10px]">REEMPLAZO</span>
+                    </td>
+                    <td class="p-2.5 text-center font-mono font-bold text-blue-300">MTTF</td>
+                    <td class="p-2.5 leading-relaxed text-slate-300">
+                      Elemento de caucho sintético armado con mallas de acero sometido a pulsaciones dinámicas. No admite vulcanizaciones ni reparaciones de campo por riesgo de estallido. Costo bajo ($320 USD). Se programa descarte a vida límite (24 meses).
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="p-2.5 font-bold text-white">Lámina de Poliuretano de Rascador</td>
+                    <td class="p-2.5 text-center font-mono text-slate-400">Parte / N8</td>
+                    <td class="p-2.5 text-center">
+                      <span class="px-2 py-0.5 rounded bg-rose-900/50 text-rose-300 font-bold font-mono text-[10px]">REEMPLAZO</span>
+                    </td>
+                    <td class="p-2.5 text-center font-mono font-bold text-blue-300">MTTF</td>
+                    <td class="p-2.5 leading-relaxed text-slate-300">
+                      Consumible sacrificial por fricción contra la banda cargada de áridos abrasivos. Se ajusta su tensión mediante resorte hasta agotar el labio útil (< 15 mm), punto en el que se descarta y sustituye en 30 minutos ($450 USD).
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="p-2.5 font-bold text-white">Banda Transportadora EP 630/4 (15 m)</td>
+                    <td class="p-2.5 text-center font-mono text-slate-400">Ítem / N7</td>
+                    <td class="p-2.5 text-center">
+                      <span class="px-2 py-0.5 rounded bg-amber-900/50 text-amber-300 font-bold font-mono text-[10px]">REPARACIÓN LOCAL (MTBF)</span>
+                    </td>
+                    <td class="p-2.5 text-center font-mono font-bold text-blue-300">MTBF / MTTF</td>
+                    <td class="p-2.5 leading-relaxed text-slate-300">
+                      Ante desgarros longitudinales localizados por piedras atascadas, se ejecuta vulcanizado en caliente con parches romboidales escalonados ($4,200 USD). Si el daño estructural sobrepasa el 30% de la longitud total de la cinta, se declara fin de vida y se reemplaza el rollo completo.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
@@ -642,6 +1045,28 @@
               <div><strong>O (Operación):</strong> 1 (Sin parada), 3 (Parada parcial), <span class="text-rose-400 font-bold">10 (Parada total + petrificación)</span>.</div>
               <div><strong>D (Costo Daño):</strong> 1 (&lt;$1k USD), 2 ($1k-$3k USD), <span class="text-amber-400 font-bold">4 (&gt;$3k USD)</span>.</div>
             </div>
+          </div>
+
+          <!-- NOTA TÉCNICA DE DEFENSA: EL CASO FRONTERA DE SYS-TEN -->
+          <div class="mt-4 p-4 rounded-xl bg-blue-950/40 border border-blue-800/60 text-xs text-slate-300 space-y-2">
+            <div class="flex items-center gap-2">
+              <span class="text-base">⚖️</span>
+              <h3 class="font-bold text-blue-300 uppercase tracking-wide text-xs">
+                Análisis de Ingeniería y Criterio de Cátedra: El Caso Frontera de SYS-TEN (\(C = 16\))
+              </h3>
+            </div>
+            <p class="leading-relaxed">
+              En la matriz por subsistemas, el <strong>Sistema Oleohidráulico de Tensión (SYS-TEN)</strong> arroja cuantitativamente:
+              <br><span class="font-mono text-white">\(F=2,\ S=2,\ A=2,\ O=3,\ D=1 \implies C_i = 2+2+3+1 = 8 \implies C = 2 \times 8 = 16\)</span>.
+            </p>
+            <p class="leading-relaxed">
+              <strong>1. Resultado Matemático Estricto:</strong> Al ser \(C = 16 \ge 15\), la fórmula cuantitativa lo sitúa en el umbral inferior de <strong>Clase A (Crítico)</strong>.
+            </p>
+            <p class="leading-relaxed">
+              <strong>2. Criterio Operacional y Consenso de Cátedra (Clase B — Semicrítico):</strong> En la práctica industrial de plantas de áridos y en los lineamientos pedagógicos de la cátedra, este sistema se gestiona bajo el <strong>Modelo Sistemático / Predictivo</strong> (característico de Clase B), fundamentado en dos premisas técnicas:
+              <br>• <em>Sensibilidad de Factores Subjetivos:</em> Si en una evaluación conservadora de planta el riesgo a personas se acota al no existir operarios permanentes junto al tensor (\(S=1\)) y la fuga de aceite queda contenida en la batea colectora (\(A=1\)), el índice resulta \(C_i = 6 \implies C = 2 \times 6 = 12\), ubicándolo de forma directa en <strong>Clase B (Semicrítico)</strong>.
+              <br>• <em>Estrategia de Mantenimiento Aplicable:</em> La falla de un latiguillo o retenes de cilindro no amerita la costosa instrumentación de monitoreo continuo online 24/7 (vibraciones/termografía permanente típica de los accionamientos Clase A como el motor o tambor motriz), sino que se neutraliza con alta eficacia mediante <strong>reemplazo preventivo sistemático por tiempo calendario a vida límite (24 meses)</strong> y verificación periódica de calibración presostática (20 bar).
+            </p>
           </div>
         </div>
       </section>
@@ -1219,15 +1644,143 @@
           <div class="space-y-6 text-xs leading-relaxed text-slate-300">
             <h3 class="text-sm font-bold text-blue-400 uppercase tracking-wide border-b border-slate-800 pb-1">3. Resolución Técnica de Consignas</h3>
 
-            <!-- CONSIGNA 1 -->
-            <div class="space-y-2">
-              <h4 class="font-bold text-white text-xs">Consigna 1: Jerarquía de Activos (ISO 14224) y Modelos de Mantenimiento</h4>
-              <p>
-                <strong>a) Árbol Taxonómico y Decisión Reemplazo vs. Reparación:</strong> Siguiendo la ISO 14224, la instalación se estructura desde Planta (N2), Área (N3), Unidad/Equipo (N4 CV-01), Sistemas (N5 Unidad Motriz, Banda, Tensión, Chasis, Control), Componentes (N6 rodamientos, motor, reductor) hasta Elementos (N8 pistas, sellos, bobinas).
-              </p>
-              <div class="p-3 bg-slate-950 rounded-lg border border-slate-800 font-mono text-[11px]">
-                • <strong>Decisiones de Reemplazo (MTTF):</strong> Aplica a componentes unitarios no reparables (Nivel 6 descartable y Nivel 8: rodamientos SKF, mangueras hidráulicas, sellos O-ring, cuchilla de uretano).<br>
-                • <strong>Decisiones de Reparación (MTBF):</strong> Aplica a sistemas y equipos reparables (Nivel 4 cinta completa y Nivel 5: motor eléctrico, reductor de velocidad, central oleohidráulica).
+            <!-- CONSIGNA 1: JERARQUÍA TAXONÓMICA, CRITERIOS DE REPARACIÓN/REEMPLAZO Y MODELOS DE MANTENIMIENTO -->
+            <div class="space-y-4 p-4 rounded-xl bg-slate-900/60 border border-slate-800">
+              <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                <h4 class="font-bold text-white text-xs flex items-center gap-2">
+                  <span class="px-2 py-0.5 rounded bg-blue-900/60 text-blue-300 font-mono text-[11px]">Consigna 1</span>
+                  Jerarquía de Activos Electromecánicos (ISO 14224), Criterios LCC y Asignación de Modelos
+                </h4>
+                <span class="text-[10px] font-mono text-slate-400">Puntaje Base: 100% Auditado</span>
+              </div>
+
+              <!-- 1.a TAXONOMÍA -->
+              <div class="space-y-2">
+                <span class="font-bold text-blue-400 block text-xs">a) Taxonomía de Activos a 6 Niveles y Homologación ISO 14224:</span>
+                <p class="text-slate-300 leading-relaxed">
+                  Para asegurar la imputación inequívoca de costos, órdenes de trabajo y modos de falla en el sistema CMMS/GMAO, se estructura el activo electromecánico en una jerarquía unívoca de 6 niveles operativos:
+                </p>
+                <div class="p-3 bg-slate-950 rounded-lg border border-slate-800 font-mono text-[11px] space-y-1.5 text-slate-300">
+                  <div>• <strong>Nivel 2 (Instalación):</strong> Planta de Clasificación y Procesamiento de Áridos de Alta Densidad (7,200 h/año en régimen continuo).</div>
+                  <div>• <strong>Nivel 3 (Sección / Área):</strong> Área Operativa de Elevación Continua, Acopio y Molienda Primaria.</div>
+                  <div>• <strong>Nivel 4 (Unidad de Equipo):</strong> Cinta Transportadora Principal de Alimentación a Reactor (TAG: CV-01).</div>
+                  <div>• <strong>Nivel 5 (Subunidad / Subsistema):</strong> SYS-MOT (Motriz), SYS-BAN (Banda y Rodillos), SYS-TEN (Tensión Oleohidráulica), SYS-EST (Estructura y Limpieza), SYS-ELE (Control y Seguridad).</div>
+                  <div>• <strong>Nivel 6 / 7 (Elemento / Ítem Mantenible):</strong> Motor asincrónico 55 kW, Reductor ortogonal 3 etapas (i=28:1), Tambor motriz Ø500 con engomado cerámico, Tambor de cola autolimpiante Ø400, Centralita oleohidráulica 20 bar, Cilindro de tensión de doble efecto, Rascadores primario y secundario, Tablero de potencia CCM.</div>
+                  <div>• <strong>Nivel 8 (Componente / Parte Indivisible):</strong> Rodamientos oscilantes SKF 22220 EK y 22216 EK, devanados estatóricos de cobre clase F, trenes de engranajes helicoidales, retenes radiales de Vitón, latiguillos de alta presión 2SN, cuchilla de poliuretano 85 ShA, pastillas de carburo de tungsteno, arrancador suave electrónico.</div>
+                </div>
+                <div class="p-2.5 rounded bg-blue-950/30 border border-blue-800/40 text-[11px] text-blue-200">
+                  <strong>Aclaración Metodológica sobre la ISO 14224 (Cláusula 6.2):</strong> Se deja expresa constancia de que la norma internacional denomina <em>Ítem Mantenible (Maintainable Item)</em> al Nivel 7 y <em>Parte (Part)</em> al Nivel 8, mientras que el enunciado académico invierte la nomenclatura denominándolos <em>Elemento</em> y <em>Componente</em> respectivamente. Ambos esquemas son funcionalmente equivalentes al aislar el conjunto complejo reparable de sus componentes unitarios descartables.
+                </div>
+              </div>
+
+              <!-- 1.b REEMPLAZO VS REPARACIÓN -->
+              <div class="space-y-2 pt-2 border-t border-slate-800">
+                <span class="font-bold text-blue-400 block text-xs">b) Criterios de Decisión: Reemplazo (MTTF) vs. Reparación (MTBF) y Regla LCC:</span>
+                <p class="text-slate-300 leading-relaxed">
+                  La frontera técnica entre reparar o reemplazar un activo responde a tres directrices de ingeniería de confiabilidad:
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5 text-[11px]">
+                  <div class="p-2.5 bg-slate-950 rounded-lg border border-slate-800">
+                    <span class="font-bold text-slate-200 block mb-0.5">1. Reparabilidad Intrínseca</span>
+                    <span class="text-slate-400">Piezas atómicas de alta precisión (rodamientos, sellos de elastómero, mangueras hidráulicas) sufren degradación microestructural irreversible al fallar o desmontarse; su reacondicionamiento in-situ es inviable.</span>
+                  </div>
+                  <div class="p-2.5 bg-slate-950 rounded-lg border border-slate-800">
+                    <span class="font-bold text-emerald-300 block mb-0.5">2. Regla Económica LCC (65%)</span>
+                    <span class="text-slate-400">Si el costo acumulado de intervención (\(C_{\text{rep}} + C_{\text{HH}}\)) supera el <strong>65% del costo de adquisición de una unidad nueva de fábrica con garantía</strong>, se prohíbe la reparación y se ejecuta reemplazo integral.</span>
+                  </div>
+                  <div class="p-2.5 bg-slate-950 rounded-lg border border-slate-800">
+                    <span class="font-bold text-amber-300 block mb-0.5">3. Modelado: MTBF vs. MTTF</span>
+                    <span class="text-slate-400">Los subsistemas reparables se modelan mediante <strong>MTBF</strong> (vida renovable sujeta a paradas y puestas en marcha), mientras que los ítems descartables se gestionan con <strong>MTTF</strong> (un solo ciclo de vida hasta falla terminal).</span>
+                  </div>
+                </div>
+                <div class="overflow-x-auto rounded border border-slate-800 text-[10px] font-mono">
+                  <table class="w-full text-left">
+                    <thead class="bg-slate-800/80 text-slate-300">
+                      <tr>
+                        <th class="p-1.5">Ítem del Activo</th>
+                        <th class="p-1.5 text-center">Nivel</th>
+                        <th class="p-1.5 text-center">Estrategia</th>
+                        <th class="p-1.5 text-center">Métrica</th>
+                        <th class="p-1.5">Justificación de Ingeniería</th>
+                      </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-800/60 text-slate-300">
+                      <tr>
+                        <td class="p-1.5 font-bold text-white">Rodamiento SKF 22220 EK</td>
+                        <td class="p-1.5 text-center">Parte / N8</td>
+                        <td class="p-1.5 text-center text-rose-400 font-bold">Reemplazo</td>
+                        <td class="p-1.5 text-center text-blue-400">MTTF</td>
+                        <td class="p-1.5 font-sans">Desconchado en pistas templadas; rectificado imposible in-situ; repuesto $1,850 USD.</td>
+                      </tr>
+                      <tr>
+                        <td class="p-1.5 font-bold text-white">Motor Eléctrico 55 kW</td>
+                        <td class="p-1.5 text-center">Ítem / N7</td>
+                        <td class="p-1.5 text-center text-blue-400 font-bold">Reparación / Standby</td>
+                        <td class="p-1.5 text-center text-blue-400">MTBF</td>
+                        <td class="p-1.5 font-sans">Rebobinado clase H ($3,400 USD vs $12,000 nuevo = 28% LCC). Reemplazo rápido por Standby (4 h).</td>
+                      </tr>
+                      <tr>
+                        <td class="p-1.5 font-bold text-white">Reductor Ortogonal 3 Etapas</td>
+                        <td class="p-1.5 text-center">Ítem / N7</td>
+                        <td class="p-1.5 text-center text-blue-400 font-bold">Reparación</td>
+                        <td class="p-1.5 text-center text-blue-400">MTBF</td>
+                        <td class="p-1.5 font-sans">Cambio de retenes de Vitón, rodamientos y aceite sintético ISO VG 220, conservando cárter y ejes.</td>
+                      </tr>
+                      <tr>
+                        <td class="p-1.5 font-bold text-white">Latiguillo Oleohidráulico 20 bar</td>
+                        <td class="p-1.5 text-center">Parte / N8</td>
+                        <td class="p-1.5 text-center text-rose-400 font-bold">Reemplazo</td>
+                        <td class="p-1.5 text-center text-blue-400">MTTF</td>
+                        <td class="p-1.5 font-sans">Fatiga elástica bajo presión pulsante; no admite vulcanizado; descarte a 24 meses ($320 USD).</td>
+                      </tr>
+                      <tr>
+                        <td class="p-1.5 font-bold text-white">Lámina de Poliuretano (Rascador)</td>
+                        <td class="p-1.5 text-center">Parte / N8</td>
+                        <td class="p-1.5 text-center text-rose-400 font-bold">Reemplazo</td>
+                        <td class="p-1.5 text-center text-blue-400">MTTF</td>
+                        <td class="p-1.5 font-sans">Consumible de desgaste sacrificial; sustitución en 30 minutos al superar labio útil ($450 USD).</td>
+                      </tr>
+                      <tr>
+                        <td class="p-1.5 font-bold text-white">Banda EP 630/4 (15 m)</td>
+                        <td class="p-1.5 text-center">Ítem / N7</td>
+                        <td class="p-1.5 text-center text-amber-400 font-bold">Reparación Local</td>
+                        <td class="p-1.5 text-center text-blue-400">MTBF / MTTF</td>
+                        <td class="p-1.5 font-sans">Vulcanizado en caliente ante desgarros localizados; si supera 30% longitudinal, reemplazo completo.</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <!-- 1.c CATEGORIZACIÓN Y MODELOS -->
+              <div class="space-y-2 pt-2 border-t border-slate-800">
+                <span class="font-bold text-blue-400 block text-xs">c) Categorización de Criticidad y Asignación de Modelos de Mantenimiento:</span>
+                <p class="text-slate-300 leading-relaxed">
+                  Aplicando la fórmula oficial de cátedra \(C_i = S + A + O + D\) y \(C = F \times C_i\), los subsistemas se categorizan en tres clases operativas con sus respectivos modelos:
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-[11px]">
+                  <div class="p-3 rounded-lg bg-rose-950/30 border border-rose-800/50 space-y-1">
+                    <span class="font-bold text-rose-300 block">CLASE A — CRÍTICO (\(C \ge 15\))</span>
+                    <p class="text-slate-300 leading-relaxed">
+                      <strong>Subsistemas:</strong> SYS-MOT (\(C=51\)) y SYS-BAN (\(C=51\)).
+                      <br><strong>Modelo: Alta Disponibilidad.</strong> Monitoreo continuo de condición (CBM) mediante análisis vibracional con demodulación de envolvente (SKF 22220 EK), termografía infrarroja periódica (motor 55 kW) y análisis físico-químico trimestral de lubricante sintético. Overhaul programado en paradas mayores y política de motor Standby en almacén.
+                    </p>
+                  </div>
+                  <div class="p-3 rounded-lg bg-amber-950/30 border border-amber-800/50 space-y-1">
+                    <span class="font-bold text-amber-300 block">CLASE B — SEMICRÍTICO (\(10 \le C < 15\))</span>
+                    <p class="text-slate-300 leading-relaxed">
+                      <strong>Subsistemas:</strong> SYS-EST (\(C=12\)) y SYS-TEN (\(C=16\) frontera operativa).
+                      <br><strong>Modelo: Sistemático / Predictivo.</strong> Re-lubricación calendarizada según catálogo, sustitución preventiva de latiguillos oleohidráulicos a vida límite de 24 meses, verificación periódica de tarado de válvula de alivio (20 bar) y chequeo de huelgos en cuchillas de rascador.
+                    </p>
+                  </div>
+                  <div class="p-3 rounded-lg bg-emerald-950/30 border border-emerald-800/50 space-y-1">
+                    <span class="font-bold text-emerald-300 block">CLASE C — NO CRÍTICO (\(C < 10\))</span>
+                    <p class="text-slate-300 leading-relaxed">
+                      <strong>Subsistemas:</strong> SYS-ELE (\(C=7\)).
+                      <br><strong>Modelo: Condicional / TPM.</strong> Tareas de Mantenimiento Autónomo a cargo de los operadores de planta (limpieza, inspección de cables tiradores y sensores inductivos, verificación de bornes) y mantenimiento correctivo admisible ante contingencias menores no propagables.
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
 
