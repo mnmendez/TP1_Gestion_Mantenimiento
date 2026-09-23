@@ -28,6 +28,8 @@ from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils import get_column_letter
 
+from report_builder import build_technical_report
+
 # ==============================================================================
 # 0) CONFIGURACIÓN DE PÁGINA E IDENTIDAD VISUAL (temática ingeniería industrial)
 # ==============================================================================
@@ -464,6 +466,12 @@ with st.sidebar:
         for k, v in ESCALAS.items():
             st.markdown(f"**{k}.** {v}")
 
+    st.divider()
+    with st.expander("👤 Datos del Alumno (Portada del Informe)", expanded=False):
+        alumno_nombre = st.text_input("Nombre y Apellido", value="Martín Méndez", key="alumno_nombre")
+        alumno_legajo = st.text_input("Legajo / Matrícula", value="UTN FRSR", key="alumno_legajo")
+        ciclo_lectivo = st.text_input("Ciclo Lectivo", value="2026", key="ciclo_lectivo")
+
 # ==============================================================================
 # 4) DATAFRAMES BASE Y ESTIMACIÓN DE REPETICIONES
 # ==============================================================================
@@ -489,12 +497,13 @@ F_sugerido = N_por_sub.apply(factor_frecuencia)
 # ==============================================================================
 # 5) PESTAÑAS
 # ==============================================================================
-tab_taxo, tab_kpi, tab_matriz, tab_dash, tab_excel = st.tabs(
+tab_taxo, tab_kpi, tab_matriz, tab_dash, tab_excel, tab_informe = st.tabs(
     ["1 · Taxonomía del Activo (ISO 14224)",
      "2 · Registro de Fallas y KPIs",
      "3 · Matriz de Criticidad Dinámica",
      "4 · Dashboard (Plotly)",
-     "5 · Exportación a Excel"])
+     "5 · Exportación a Excel",
+     "6 · Informe Técnico Oficial (.docx)"])
 
 # -------------------------------------------------------------------------------
 # PESTAÑA 1 - TAXONOMÍA DEL ACTIVO (NIVELES ISO 14224)
@@ -920,6 +929,60 @@ with tab_dash:
     g3.plotly_chart(fig3, width="stretch")
     g4.plotly_chart(fig4, width="stretch")
 
+    st.divider()
+    st.markdown("### G5 · Distribución Temporal de Fallas y Patrones de Nowlan & Heap (Consigna 4.b)")
+    st.caption("Cronología anual de los eventos de falla registrados sobre las 7.200 h programadas. "
+               "Permite contrastar si el activo responde al patrón clásico de la bañera (Patrón A) o a fallas aleatorias (Patrones D, E o F).")
+
+    df_temp = pd.DataFrame({
+        "evento": ["F1", "F2", "F3", "F4", "F5"],
+        "hora_anual": [1100, 2750, 4100, 5400, 6600],
+        "componente": ["Rodamiento oscilante SKF 22220 EK", "Motor eléctrico 55 kW",
+                       "Latiguillo alta presión", "Banda de transporte (goma)", "Rascador primario uretano"],
+        "ttp": [28, 42, 6, 36, 8],
+        "costo_total": [73050, 109000, 15620, 95100, 20850],
+        "patron": ["Patrón E (Falla aleatoria por polvo abrasivo)",
+                   "Patrón E (Bloqueo térmico accidental por polvo)",
+                   "Patrón D (Fatiga por pulsación hidráulica)",
+                   "Patrón F (Desalineación y atasco mecánico)",
+                   "Patrón E (Desgaste prematuro abrasivo)"]
+    })
+
+    fig5 = go.Figure()
+    fig5.add_trace(go.Scatter(
+        x=df_temp["hora_anual"], y=df_temp["ttp"],
+        mode="markers+text",
+        text=df_temp["evento"],
+        textposition="top center",
+        marker=dict(size=[24, 32, 16, 28, 18], color=[ROJO, ROJO, NARANJ, ROJO, VERDE],
+                    line=dict(color="white", width=2), opacity=0.9),
+        customdata=np.stack((df_temp["componente"], df_temp["costo_total"], df_temp["patron"]), axis=-1),
+        hovertemplate="<b>%{text} · %{customdata[0]}</b><br>"
+                      "Hora Operativa: %{x:,.0f} h<br>TTP: %{y:.0f} h<br>"
+                      "Costo Total: $%{customdata[1]:,.0f} USD<br>"
+                      "Clasificación: %{customdata[2]}<extra></extra>"
+    ))
+
+    fig5.add_hline(y=df_temp["ttp"].mean(), line_dash="dash", line_color=AZUL2,
+                   annotation_text=f"TTP Promedio: {df_temp['ttp'].mean():.1f} h (Tasa aleatoria ~ constante)",
+                   annotation_position="bottom right")
+
+    fig5.update_layout(
+        title="Distribución Temporal de Contingencias en el Ciclo Operativo (TOP = 7.200 h)",
+        xaxis=dict(title="Horas de Operación Acumuladas en el Año [h]", range=[0, 7500], dtick=1000),
+        yaxis=dict(title="Tiempo de Parada TTP [h]", range=[0, 50]),
+        template="plotly_white", height=380
+    )
+    st.plotly_chart(fig5, width="stretch")
+
+    st.info(
+        "💡 **Conclusión Técnica (Consigna 4.b):** Este activo **NO** sigue la tradicional 'curva de la bañera' (Patrón A), "
+        "la cual solo representa ~4% de los activos industriales complejos. En cambio, responde a los **Patrones D, E y F "
+        "(fallas aleatorias y prematuras condicionales al entorno)** debido a la contaminación abrasiva, polvo y vibración. "
+        "Por lo tanto, la sustitución rígida por horas de servicio o calendario es ineficaz y contraproducente, debiéndose "
+        "priorizar el Mantenimiento Basado en la Condición (CBM) y el Mantenimiento Autónomo (TPM)."
+    )
+
 # -------------------------------------------------------------------------------
 # PESTAÑA 5 - EXPORTACIÓN PROFESIONAL A EXCEL (openpyxl)
 # -------------------------------------------------------------------------------
@@ -1092,6 +1155,143 @@ with tab_excel:
 
     st.caption("Los valores del Excel corresponden a la configuración actual de la "
                "barra lateral (parámetros, umbrales y modo N_est).")
+
+# -------------------------------------------------------------------------------
+# PESTAÑA 6 - INFORME TÉCNICO OFICIAL DE CÁTEDRA (.DOCX)
+# -------------------------------------------------------------------------------
+with tab_informe:
+    st.subheader("Informe Técnico Oficial de Cátedra — Justificación Integral")
+    st.caption("Documento formal que responde y justifica las 6 consignas del enunciado oficial de UTN FRSR "
+               "con rigor de ingeniería electromecánica, sincronizado en vivo con los parámetros y supuestos de la aplicación.")
+
+    col_inf1, col_inf2, col_inf3 = st.columns(3)
+    col_inf1.metric("Alumno / Responsable", alumno_nombre, help=f"Legajo: {alumno_legajo}")
+    col_inf2.metric("Ciclo / Régimen", f"{ciclo_lectivo} · {TOP_anio:,.0f} h/año",
+                    help=f"Costo Parada: ${costo_par:,.0f} USD/h | MO: ${costo_hh:,.0f} USD/HH")
+    supuesto_str = f"Con Repetición (N_est ≈ {N_est_total})" if usar_n_est else f"Nominal (N = {N_activo})"
+    col_inf3.metric("Supuesto Activo", supuesto_str,
+                    help="Determina el desglose de fallas y MTBF en el informe.")
+
+    # Generación en memoria del archivo DOCX
+    docx_buffer = build_technical_report(
+        alumno=alumno_nombre,
+        legajo=alumno_legajo,
+        anio=ciclo_lectivo,
+        TOP=TOP_anio,
+        cost_parada=costo_par,
+        cost_hh=costo_hh,
+        df_fallas=df_fallas,
+        kpis_nominal={"ttp": 120.0, "tfr": TOP_anio - 120.0, "mtbf": (TOP_anio - 120.0) / 5.0,
+                      "mttr": 120.0 / 5.0, "ai": ((TOP_anio - 120.0) / TOP_anio) * 100,
+                      "ao": ((TOP_anio - 120.0) / TOP_anio) * 100, "n": 5},
+        kpis_rep={"ttp": 120.0, "tfr": TOP_anio - 120.0, "mtbf": (TOP_anio - 120.0) / N_est_total,
+                  "mttr": 120.0 / N_est_total, "ai": ((TOP_anio - 120.0) / TOP_anio) * 100,
+                  "ao": ((TOP_anio - 120.0) / TOP_anio) * 100, "n": N_est_total},
+        df_matriz=df_matriz
+    )
+
+    st.download_button(
+        label="📥 Descargar Informe Técnico Oficial (.docx)",
+        data=docx_buffer.getvalue(),
+        file_name="TP1_Informe_Tecnico_Electromecanico_UTN.docx",
+        mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        help="Descarga el documento Word (.docx) formateado con estilos institucionales UTN FRSR y todas las respuestas completas."
+    )
+
+    st.markdown("---")
+    st.markdown("### 📖 Vista previa interactiva de las consignas respondidas")
+
+    with st.expander("Consigna 1: Jerarquía de Activos (ISO 14224) y Modelos de Mantenimiento", expanded=True):
+        st.markdown("""
+        **a) Arbolado Jerárquico y Decisiones de Reemplazo (MTTF) vs. Reparación (MTBF):**
+        - **Nivel 2 (Complejo Industrial):** Planta de Procesamiento de Minerales / Áridos.
+        - **Nivel 3 (Área Operativa):** Sección de Elevación, Transporte y Molienda Primaria.
+        - **Nivel 4 (Equipo):** Cinta Transportadora Principal (CV-01).
+        - **Nivel 5 (Sistemas):** Unidad Motriz, Banda y Rodillos, Sistema de Tensión, Estructura/Chasis, Tablero y Control.
+        - **Nivel 6 (Componentes):** Rodamientos SKF 22220 EK, motor 55 kW, reductor i=28:1, latiguillos hidráulicos, rascador de uretano.
+        - **Nivel 8 (Elementos):** Pistas de rodadura, retenes de grasa, sellos O-ring, espiras de cobre.
+
+        *Criterio Técnico:*
+        - **Reemplazo (Nivel 6 y 8):** Componentes unitarios indivisibles descartables (rodamientos, sellos, mangueras). Métrica: **MTTF**.
+        - **Reparación (Nivel 4 y 5):** Sistemas y equipos restaurables (motor eléctrico, reductor ortogonal, tambores). Métrica: **MTBF**.
+
+        **b) y c) Matriz de Criticidad y Modelos Asignados:**
+        - **Unidad Motriz (Clase A — Crítico, C=51):** Modelo de Alta Disponibilidad (monitoreo continuo de vibraciones y corriente, overhaul programado).
+        - **Banda y Rodillos (Clase A — Crítico, C=51):** Modelo de Alta Disponibilidad (inspección de empalmes, termografía en rodillos y alineación continua).
+        - **Sistema de Tensión (Clase B — Semicrítico, C=16):** Modelo Sistemático / Predictivo (análisis de aceite hidráulico, control de presión e inspección de latiguillos).
+        - **Estructura y Chasis (Clase B/C):** Modelo Condicional / TPM (rutina CIL por operador y remoción de áridos).
+        - **Tablero y Control (Clase C — No Crítico, C=7):** Modelo Condicional / TPM (termografía semestral y limpieza de filtros).
+        """)
+
+    with st.expander("Consigna 2: Plan de Tareas de Inspección (Sensoriales e Instrumentales)"):
+        st.markdown("""
+        Se establece la Ruta de Inspección Rutinaria del activo:
+        1. **Inspecciones Sensoriales (Operador / TPM en marcha):**
+           - *Rascadores de uretano:* Control visual de filo, presión y acumulación de finos (Frecuencia: Diaria por turno).
+           - *Tambores y poleas:* Detección auditiva de rozamiento y control visual de material pegado (Frecuencia: Diaria).
+           - *Centralita oleohidráulica:* Control visual de nivel, fugas en racores y pulsaciones anormales (Frecuencia: Diaria).
+        2. **Inspecciones Instrumentales (Mantenimiento / Predictivo):**
+           - *Rodamientos SKF 22220 EK:* Análisis de vibraciones (demodulación de aceleración gE) y ultrasonido (Frecuencia: Quincenal).
+           - *Motor 55 kW:* Termografía infrarroja de carcasa/bornera y medición de corriente con pinza amperimétrica (Frecuencia: Mensual).
+           - *Reductor ortogonal:* Análisis de laboratorio de lubricante sintético ISO VG 220 (viscosidad, humedad ppm, conteo de partículas) (Frecuencia: Trimestral).
+        """)
+
+    with st.expander("Consigna 3: Análisis de Tipos de Mantenimiento Proactivo (Tabla 3 del TP)"):
+        st.markdown("""
+        Cuadro de acciones proactivas para prevenir las 5 contingencias históricas:
+        - **F1 (Rodamiento oscilante SKF 22220 EK):** Mantenimiento Predictivo (CBM) mediante análisis de vibraciones espectral y lubricación asistida por ultrasonido (Quincenal).
+        - **F2 (Motor eléctrico 55 kW):** Mantenimiento Autónomo (TPM) de limpieza de rejilla de ventilador + Termografía y ensayo de resistencia de aislación (Megado mensual).
+        - **F3 (Latiguillo de alta presión):** Mantenimiento Preventivo Sistemático con sustitución por horas de servicio / calendario (Vida útil máxima 2 años).
+        - **F4 (Banda transportadora):** Mantenimiento Autónomo (TPM) con rascador interno en tambor de reenvío + Interbloqueo seguro por sensores inductivos de desalineación (Diario).
+        - **F5 (Rascador de uretano):** Mantenimiento Autónomo (TPM) diario con verificación visual y ajuste de tensión en contrapeso (Diario por turno).
+        """)
+
+    with st.expander("Consigna 4: Determinación de KPIs de Confiabilidad y Patrones de Nowlan & Heap"):
+        st.markdown(f"""
+        **a) Memoria de Cálculo de KPIs:**
+        - **TFR:** {TOP_anio:,.0f} h - {TTP_total:.1f} h = **{TFR:,.1f} h/año**.
+        - **Caso Base Nominal (N = {N_activo}):**
+          - $MTBF = {TFR:,.1f} / {N_activo} =$ **{MTBF:,.2f} h**.
+          - $MTTR = {TTP_total:.1f} / {N_activo} =$ **{MTTR:,.2f} h**.
+          - $A_i = MTBF / (MTBF + MTTR) =$ **{Ai:.2f}%**.
+          - $A_o = TFR / TOP =$ **{Ao:.2f}%**.
+        - **Caso Refinado con Repetición (N_est ≈ {N_est_total}):**
+          - $MTBF = {TFR:,.1f} / {N_est_total} =$ **{(TFR/N_est_total):,.2f} h**.
+          - $MTTR = {TTP_total:.1f} / {N_est_total} =$ **{(TTP_total/N_est_total):,.2f} h**.
+          - Disponibilidades idénticas ($A_i = A_o = {Ao:.2f}\\%$).
+
+        **b) Patrones de Falla de Nowlan & Heap:**
+        - El activo **no responde al Patrón A (curva de la bañera)**, ya que sus fallas no obedecen a un desgaste uniforme por edad.
+        - Responde a los **Patrones D, E y F (aleatoriedad condicional al entorno)**: la abrasión por polvo, el bloqueo por suciedad y la fatiga por pulsación ocurren de manera aleatoria. Las políticas de overhaul calendario son ineficientes frente al monitoreo de condición (PdM/TPM).
+        """)
+
+    with st.expander("Consigna 5: Evaluación de Impacto Financiero y Motor Standby (Tabla 4 del TP)"):
+        st.markdown(f"""
+        **a) Balance Económico Consolidado:**
+        - **Costo de Parada:** ${df_fallas["Costo_Parada_USD"].sum():,.0f} USD (95,66% del total).
+        - **Repuestos e Insumos:** ${df_fallas["repuestos"].sum():,.0f} USD (3,26%).
+        - **Mano de Obra Propia:** ${df_fallas["Costo_MO_USD"].sum():,.0f} USD (1,08%).
+        - **Costo Total Directo:** **${df_fallas["Costo_Total_USD"].sum():,.0f} USD**.
+
+        **b) Falla Crítica (F2) y Propuesta de Motor Standby:**
+        - **Falla F2 (Motor 55 kW):** Causó el mayor impacto económico (**$109.000 USD**, 34,75% de las pérdidas).
+        - **Estrategia de Mitigación:** Almacenar un **motor Standby (55 kW, IP55, 4 polos)** en el pañol.
+        - **Impacto:** Reduce el $MTTR$ de **42 h** (retraso por rebobinado en taller externo) a solo **4 h** (reemplazo mecánico directo y alineación).
+        - **Ahorro Neto:** **$95.000 USD** en un solo evento, amortizando el costo del motor (~$3.500 USD) más de 25 veces.
+        """)
+
+    with st.expander("Consigna 6: Hipótesis Diagnóstica de Falla Combinada (Efecto Dominó en F5)"):
+        st.markdown("""
+        **Cadena Causa-Efecto Electromecánica:**
+        1. Desgaste no uniforme y fisura del rascador de uretano por contacto abrasivo continuo.
+        2. Pérdida de perfil y trabamiento mecánico de la lámina contra la banda.
+        3. Incremento brusco de la fuerza de fricción ($F_r = \\mu \\cdot F_n \\uparrow$), aumentando la cupla resistente ($T_{res} \\uparrow$) sobre la polea motriz.
+        4. El motor asincrónico incrementa su deslizamiento ($s \\uparrow$) y, en consecuencia, eleva su corriente estatórica ($I_1 \\propto T_{res}$), generando calentamiento excesivo por efecto Joule ($P = 3 I^2 R$).
+        5. El reductor ortogonal trabaja en sobrecarga mecánica continua, transmitiendo calor al baño de aceite sintético ISO VG 220 (> 95 °C). A esa temperatura, la viscosidad cae drásticamente, rompiendo la película lubricante EHL y acelerando el desgaste por micropitting.
+
+        **Interrupción por Mantenimiento Autónomo (TPM):**
+        Una inspección visual diaria de 3 minutos al inicio de turno permite al operador detectar la holgura o desgaste inicial del labio del rascador y reajustar el contrapeso, interrumpiendo el efecto dominó antes de que sobrecargue el reductor y el motor.
+        """)
 
 st.markdown("<div style='text-align:center;color:#7F8C8F;font-size:0.8rem;margin-top:1rem'>"
             "UTN FRSR · Gestión y Mantenimiento Electromecánico · TP N°1 · "
